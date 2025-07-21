@@ -19,7 +19,7 @@ type ElementProps = {
       valueAsNum: true;
     }
 ) &
-  Pick<ArkRadioGroup.RootProps, "disabled" | "defaultValue">;
+  Pick<ArkRadioGroup.RootProps, "value" | "disabled" | "defaultValue">;
 type RadioGroupElementProps = StandardComponentProps<ElementProps, "div">;
 
 export type RadioGroupProps = RadioGroupVariantProps & RadioGroupElementProps;

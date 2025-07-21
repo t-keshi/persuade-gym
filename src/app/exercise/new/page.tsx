@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/Button/Button";
 import { Box, HStack, VStack } from "../../../../styled-system/jsx";
 import { Container } from "@/components/ui/Container/Container";
@@ -8,8 +10,26 @@ import { CHARACTER_ID, characterPresets } from "@/domain/character";
 import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { scenarioPresets } from "@/domain/scenario";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const NewExercisePage = () => {
+  const router = useRouter();
+  const [selectedCharacter, setSelectedCharacter] = useState<string>(
+    CHARACTER_ID.BEGINNER
+  );
+  const [selectedScenario, setSelectedScenario] = useState<string>(
+    scenarioPresets[0].id
+  );
+
+  const handleStart = () => {
+    const params = new URLSearchParams({
+      character: selectedCharacter,
+      scenario: selectedScenario,
+    });
+    router.push(`/exercise/chat?${params.toString()}`);
+  };
+
   return (
     <VStack height="contentHeight" gap="none">
       <Box flexGrow={1} overflowY="scroll" width="full">
@@ -19,6 +39,8 @@ export const NewExercisePage = () => {
               <RadioGroup
                 legend="1. 説得相手を選択"
                 defaultValue={CHARACTER_ID.BEGINNER}
+                value={selectedCharacter}
+                onValueChange={(details) => setSelectedCharacter(details.value)}
               >
                 {characterPresets.map((character) => (
                   <RadioGroupItem key={character.id} value={character.id}>
@@ -46,6 +68,8 @@ export const NewExercisePage = () => {
               <RadioGroup
                 legend="2. シナリオを選択"
                 defaultValue={scenarioPresets[0].id}
+                value={selectedScenario}
+                onValueChange={(details) => setSelectedScenario(details.value)}
               >
                 {scenarioPresets.map((scenario) => (
                   <RadioGroupItem key={scenario.id} value={scenario.id}>
@@ -70,7 +94,7 @@ export const NewExercisePage = () => {
       <Box width="full" paddingBottom="lg">
         <FloatingActionArea>
           <Container size="sm">
-            <Button as="link" size="lg" width="hug" href="/exercise/chat">
+            <Button size="lg" width="hug" onClick={handleStart}>
               エクササイズ開始
             </Button>
           </Container>

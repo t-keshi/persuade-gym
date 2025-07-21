@@ -1,6 +1,6 @@
 "use server";
 
-import { parseWithZod } from "@conform-to/zod/v4";
+import { parseWithZod } from "@conform-to/zod";
 import { schema } from "./schema";
 
 export const mockAction = async (_: unknown, formData: FormData) => {

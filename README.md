@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Persuade Gym - 説得力トレーニングアプリ
 
-## Getting Started
+営業職の説得力を鍛えるための AI トレーニングアプリケーションです。
 
-First, run the development server:
+## 概要
+
+Persuade Gym は、AI との対話を通じて説得力を向上させるトレーニングアプリです。様々な難易度のキャラクターと、実践的なビジネスシナリオで練習することができます。
+
+## 機能
+
+- 🎭 **複数のキャラクター**: 初級から上級まで、異なる性格と難易度のキャラクター
+- 📊 **実践的なシナリオ**: 新商品提案、価格交渉、社内プロジェクト提案など
+- 💯 **ポイント制システム**: 文字数に応じたポイント消費で効率的な説得を促進
+- 🎯 **段階的な対話構造**: 導入 → 課題確認 → 提案 → クロージングの 4 段階
+- 📈 **パフォーマンス評価**: 説得の質を分析してフィードバック
+
+## セットアップ
+
+### 必要な環境
+
+- Node.js 18 以上
+- pnpm
+
+### インストール
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 依存関係のインストール
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 環境変数の設定
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+プロジェクトのルートディレクトリに `.env.local` ファイルを作成し、以下の内容を記入してください：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# OpenAI API Key
+OPENAI_API_KEY=your_openai_api_key_here
+```
 
-## Learn More
+OpenAI API キーは [OpenAI Platform](https://platform.openai.com/api-keys) から取得できます。
 
-To learn more about Next.js, take a look at the following resources:
+### 開発サーバーの起動
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[http://localhost:3000](http://localhost:3000) をブラウザで開いてアプリケーションを確認できます。
 
-## Deploy on Vercel
+## 使い方
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **キャラクター選択**: 説得相手となるキャラクターを選択
+2. **シナリオ選択**: 練習したいビジネスシナリオを選択
+3. **対話開始**: AI キャラクターとの対話を開始
+4. **説得実践**: ポイントを効率的に使いながら説得を進める
+5. **結果確認**: パフォーマンスの評価とフィードバックを確認
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 技術スタック
+
+- **フレームワーク**: Next.js 14 (App Router)
+- **スタイリング**: Panda CSS
+- **UI コンポーネント**: ARK UI
+- **AI**: Vercel AI SDK + OpenAI
+- **言語**: TypeScript
+
+## プロジェクト構造
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # APIルート
+│   ├── exercise/          # エクササイズ関連ページ
+│   └── _layout/           # レイアウトコンポーネント
+├── components/            # UIコンポーネント
+│   └── ui/               # 再利用可能なUIコンポーネント
+├── domain/               # ドメインモデル
+└── pandas/               # Panda CSS設定
+```
+
+## 開発
+
+### コマンド
+
+```bash
+# 開発サーバー起動
+pnpm dev
+
+# ビルド
+pnpm build
+
+# プロダクションサーバー起動
+pnpm start
+
+# リント
+pnpm lint
+```
+
+## ライセンス
+
+このプロジェクトはプライベートプロジェクトです。

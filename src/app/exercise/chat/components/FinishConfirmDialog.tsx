@@ -6,9 +6,13 @@ import React from "react";
 
 type Props = {
   trigger: React.ReactNode;
+  onConfirm: () => void;
 };
 
-export const FinishConfirmDialog: React.FC<Props> = ({ trigger }) => {
+export const FinishConfirmDialog: React.FC<Props> = ({
+  trigger,
+  onConfirm,
+}) => {
   return (
     <Dialog title="エクササイズを終了します" trigger={trigger}>
       <DialogDescription>
@@ -20,7 +24,12 @@ export const FinishConfirmDialog: React.FC<Props> = ({ trigger }) => {
             <Button variant="outlined" onClick={() => api.onClose()}>
               キャンセル
             </Button>
-            <Button as="link" href="/exercise/result">
+            <Button
+              onClick={() => {
+                onConfirm();
+                api.onClose();
+              }}
+            >
               終了する
             </Button>
           </>

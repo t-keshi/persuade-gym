@@ -4,6 +4,223 @@
 
 Vercel AI SDK UI は、インタラクティブなチャット、テキスト補完、アシスタントアプリケーションを簡単に構築するためのフレームワーク非依存のツールキットです。
 
+## Next.js App Router クイックスタート
+
+### 前提条件
+
+- Node.js 18+ と pnpm がインストールされていること
+- OpenAI API キー
+
+### セットアップ
+
+#### 1. Next.js アプリケーションの作成
+
+```bash
+pnpm create next-app@latest my-ai-app
+```
+
+App Router と Tailwind CSS を使用するよう選択してください。
+
+#### 2. 依存関係のインストール
+
+```bash
+pnpm add ai@beta @ai-sdk/react@beta @ai-sdk/openai@beta zod
+```
+
+#### 3. OpenAI API キーの設定
+
+`.env.local` ファイルを作成：
+
+```bash
+OPENAI_API_KEY=xxxxxxxxx
+```
+
+### 基本的な実装
+
+#### Route Handler の作成
+
+`app/api/chat/route.ts`:
+
+```tsx
+import { openai } from "@ai-sdk/openai";
+import { streamText, UIMessage, convertToModelMessages } from "ai";
+
+// ストリーミングレスポンスのタイムアウトを30秒に設定
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json();
+
+  const result = streamText({
+    model: openai("gpt-4o"),
+    messages: convertToModelMessages(messages),
+  });
+
+  return result.toUIMessageStreamResponse();
+}
+```
+
+重要なポイント：
+
+- `UIMessage[]` は UI で使用するメッセージ型（タイムスタンプなどのメタデータを含む）
+- `convertToModelMessages` で `ModelMessage[]` に変換（モデルが期待する形式）
+- `toUIMessageStreamResponse()` でストリーミングレスポンスを返す
+
+#### UI の実装
+
+`app/page.tsx`:
+
+```tsx
+"use client";
+
+import { useChat } from "@ai-sdk/react";
+import { useState } from "react";
+
+export default function Chat() {
+  const [input, setInput] = useState("");
+  const { messages, sendMessage } = useChat();
+
+  return (
+    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+      {messages.map((message) => (
+        <div key={message.id} className="whitespace-pre-wrap">
+          {message.role === "user" ? "User: " : "AI: "}
+          {message.parts.map((part, i) => {
+            switch (part.type) {
+              case "text":
+                return <div key={`${message.id}-${i}`}>{part.text}</div>;
+            }
+          })}
+        </div>
+      ))}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage({ text: input });
+          setInput("");
+        }}
+      >
+        <input
+          className="fixed dark:bg-zinc-900 bottom-0 w-full max-w-md p-2 mb-8 border border-zinc-300 dark:border-zinc-800 rounded shadow-xl"
+          value={input}
+          placeholder="Say something..."
+          onChange={(e) => setInput(e.currentTarget.value)}
+        />
+      </form>
+    </div>
+  );
+}
+```
+
+### ツールの実装
+
+#### Route Handler でツールを定義
+
+```tsx
+import { tool } from "ai";
+import { z } from "zod";
+
+export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json();
+
+  const result = streamText({
+    model: openai("gpt-4o"),
+    messages: convertToModelMessages(messages),
+    tools: {
+      weather: tool({
+        description: "Get the weather in a location (fahrenheit)",
+        inputSchema: z.object({
+          location: z.string().describe("The location to get the weather for"),
+        }),
+        execute: async ({ location }) => {
+          const temperature = Math.round(Math.random() * (90 - 32) + 32);
+          return {
+            location,
+            temperature,
+          };
+        },
+      }),
+      convertFahrenheitToCelsius: tool({
+        description: "Convert a temperature in fahrenheit to celsius",
+        inputSchema: z.object({
+          temperature: z
+            .number()
+            .describe("The temperature in fahrenheit to convert"),
+        }),
+        execute: async ({ temperature }) => {
+          const celsius = Math.round((temperature - 32) * (5 / 9));
+          return {
+            celsius,
+          };
+        },
+      }),
+    },
+  });
+
+  return result.toUIMessageStreamResponse();
+}
+```
+
+#### UI でツール結果を表示
+
+```tsx
+export default function Chat() {
+  const [input, setInput] = useState("");
+  const { messages, sendMessage } = useChat({
+    maxSteps: 5, // マルチステップツール呼び出しを有効化
+  });
+
+  return (
+    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+      {messages.map((message) => (
+        <div key={message.id} className="whitespace-pre-wrap">
+          {message.role === "user" ? "User: " : "AI: "}
+          {message.parts.map((part, i) => {
+            switch (part.type) {
+              case "text":
+                return <div key={`${message.id}-${i}`}>{part.text}</div>;
+              case "tool-weather":
+              case "tool-convertFahrenheitToCelsius":
+                return (
+                  <pre key={`${message.id}-${i}`}>
+                    {JSON.stringify(part, null, 2)}
+                  </pre>
+                );
+            }
+          })}
+        </div>
+      ))}
+      {/* フォーム部分は同じ */}
+    </div>
+  );
+}
+```
+
+### 重要な概念
+
+#### メッセージの parts 配列
+
+各メッセージには `parts` 配列があり、モデルが生成したすべての内容を順序付きで含みます：
+
+- `text`: テキストコンテンツ
+- `tool-{toolName}`: ツール呼び出しと結果
+- その他のタイプ（reasoning など）
+
+#### マルチステップツール呼び出し
+
+`maxSteps` オプションを使用することで、モデルは：
+
+1. ツールを呼び出す
+2. ツールの結果を受け取る
+3. その結果を使って追加の生成を行う
+
+これにより、複雑な対話や連続的なツール使用が可能になります。
+
+#### プログレッシブエンハンスメント
+
+Server Components では JavaScript が読み込まれていない場合でもフォーム送信が可能です。Client Components では、JavaScript が読み込まれるまで送信がキューに入れられます。
+
 ## 主要なフック
 
 ### 1. useChat
@@ -504,3 +721,6 @@ onKeyDown={(event) => {
 - ファイル添付は`image/*`と`text/*`のみ自動変換される
 - 日本語入力時は`isComposing`の確認が必要
 - Resumable Streams を使用する場合は Redis URL の設定が必要
+- AI SDK v5 では `@beta` タグを使用してインストールする必要がある
+- `UIMessage` と `ModelMessage` の型の違いに注意（`convertToModelMessages` で変換）
+- ツールパーツは `tool-{toolName}` の形式で命名される
