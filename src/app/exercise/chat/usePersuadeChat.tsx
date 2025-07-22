@@ -1,8 +1,9 @@
-import { useChat } from "@ai-sdk/react";
+import { Message, useChat } from "@ai-sdk/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { characterPresets } from "@/domain/character";
 import { scenarioPresets } from "@/domain/scenario";
+import { useLocationState } from "@location-state/core";
 
 // 文字数に応じたポイント消費の計算
 export const calculatePointCost = (text: string) => {
@@ -16,6 +17,12 @@ export const calculatePointCost = (text: string) => {
 export type Stage = "導入" | "課題確認" | "提案" | "クロージング";
 
 export const usePersuadeChat = () => {
+  const [_, setLocationState] = useLocationState<Message[]>({
+    name: "messages",
+    defaultValue: [],
+    storeName: "session",
+  });
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const characterId = searchParams.get("character") || "BEGINNER";
@@ -120,8 +127,10 @@ export const usePersuadeChat = () => {
   };
 
   const handleFinish = () => {
-    // 結果画面への遷移（メッセージデータを保存する必要がある場合は、ここで処理）
-    router.push("/exercise/result");
+    setLocationState(messages);
+    router.push(
+      `/exercise/result?character=${characterId}&scenario=${scenarioId}`
+    );
   };
 
   return {

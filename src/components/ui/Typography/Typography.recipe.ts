@@ -8,6 +8,22 @@ export const typographyRecipe = defineRecipe({
     fontFamily: "default",
   },
   variants: {
+    fontWeight: {
+      normal: {
+        fontWeight: "normal",
+      },
+      bold: {
+        fontWeight: "bold",
+      },
+    },
+    italic: {
+      true: {
+        fontStyle: "italic",
+      },
+      false: {
+        fontStyle: "normal",
+      },
+    },
     variant: {
       h1: {
         fontSize: "h1",
@@ -215,5 +231,7 @@ export const typographyRecipe = defineRecipe({
     color: "textPrimary",
     align: "left",
     dense: false,
+    fontWeight: "normal",
+    italic: false,
   } as const,
 } satisfies RecipeConfig);

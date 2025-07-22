@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/Button/Button";
 import React from "react";
 import { Box, Stack, VStack } from "../../../../styled-system/jsx";
@@ -5,30 +7,86 @@ import { Typography } from "@/components/ui/Typography/Typography";
 import { Container } from "@/components/ui/Container/Container";
 import { GradingScale } from "./components/GradingScale";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
+import { ResultLoading } from "./components/ResultLoading";
+import { useAnalysis } from "./useAnalysis";
+import { Card } from "@/components/ui/Card/Card";
+import { AlertCircle } from "lucide-react";
 
 const ResultPage: React.FC = () => {
+  const { analysis, isLoading, error } = useAnalysis();
+
+  if (isLoading) {
+    return <ResultLoading />;
+  }
+
+  if (error || !analysis) {
+    return (
+      <VStack height="contentHeight" gap="none">
+        <Box flexGrow={1} width="full">
+          <Container>
+            <Box p="lg">
+              <Card>
+                <VStack gap="md" alignItems="center">
+                  <AlertCircle size={48} color="red" />
+                  <Typography variant="h3">エラーが発生しました</Typography>
+                  <Typography>
+                    {error?.message || "分析結果を取得できませんでした"}
+                  </Typography>
+                  <Button as="link" href="/exercise/new">
+                    最初からやり直す
+                  </Button>
+                </VStack>
+              </Card>
+            </Box>
+          </Container>
+        </Box>
+      </VStack>
+    );
+  }
+
   return (
     <VStack height="contentHeight" gap="none">
       <Box flexGrow={1} overflowY="scroll" width="full">
         <Container>
           <Box p="lg">
             <Stack gap="lg">
-              <GradingScale point={100} />
-              <Typography>
-                Aliquip fugiat sunt ullamco non deserunt. Occaecat sint quis
-                aliquip elit. Nisi exercitation consequat fugiat adipisicing
-                cillum aliquip duis enim in culpa. Nisi reprehenderit fugiat
-                pariatur cupidatat ea reprehenderit magna ipsum deserunt cillum
-                culpa aliquip aliqua exercitation. Eu pariatur exercitation sit
-                velit. Culpa cupidatat do enim non et aliqua Lorem in. Aliqua
-                consectetur excepteur occaecat exercitation cillum occaecat
-                dolor. Aute aliquip cillum adipisicing eu consequat eiusmod
-                proident aliqua labore tempor id non dolor esse. Ex duis ut
-                dolor eu mollit adipisicing fugiat cupidatat laboris officia sit
-                non officia. Do elit incididunt incididunt qui anim ad mollit
-                esse minim. Reprehenderit do proident deserunt ea quis eu ea
-                pariatur adipisicing irure est exercitation est.
-              </Typography>
+              <GradingScale point={analysis.overallScore} />
+
+              {/* 良かった点 */}
+              {analysis.strengths.length > 0 && (
+                <Card>
+                  <VStack gap="md" alignItems="stretch">
+                    <Typography variant="h3">良かった点</Typography>
+                    <VStack gap="sm" alignItems="stretch">
+                      {analysis.strengths.map((strength, index) => (
+                        <Typography key={index}>• {strength}</Typography>
+                      ))}
+                    </VStack>
+                  </VStack>
+                </Card>
+              )}
+
+              {/* 改善点 */}
+              {analysis.improvements.length > 0 && (
+                <Card>
+                  <VStack gap="md" alignItems="stretch">
+                    <Typography variant="h3">改善点</Typography>
+                    <VStack gap="sm" alignItems="stretch">
+                      {analysis.improvements.map((improvement, index) => (
+                        <Typography key={index}>• {improvement}</Typography>
+                      ))}
+                    </VStack>
+                  </VStack>
+                </Card>
+              )}
+
+              {/* アドバイス */}
+              <Card>
+                <VStack gap="md" alignItems="stretch">
+                  <Typography variant="h3">次回に向けたアドバイス</Typography>
+                  <Typography>{analysis.advice}</Typography>
+                </VStack>
+              </Card>
             </Stack>
           </Box>
         </Container>

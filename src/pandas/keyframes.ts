@@ -17,4 +17,10 @@ export const keyframes = defineKeyframes({
       transform: "translateY(0)",
     },
   },
+  dots: {
+    "0%, 20%": { content: "''" },
+    "40%": { content: "'.'" },
+    "60%": { content: "'..'" },
+    "80%, 100%": { content: "'...'" },
+  },
 });
