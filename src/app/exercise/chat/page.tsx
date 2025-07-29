@@ -29,6 +29,7 @@ export const ChatExercisePage: React.FC = () => {
     handleSubmit,
     handleFinish,
   } = usePersuadeChat();
+  console.log(error);
 
   return (
     <VStack height="contentHeight" gap="none">
@@ -78,7 +79,6 @@ export const ChatExercisePage: React.FC = () => {
               </Flex>
             )}
 
-            {/* エラー表示 */}
             {error && (
               <Typography color="error">
                 エラーが発生しました: {error.message}
@@ -117,10 +117,7 @@ export const ChatExercisePage: React.FC = () => {
                         size="lg"
                         leftIcon={<SendIcon />}
                         disabled={
-                          !input.trim() ||
-                          isLoading ||
-                          remainingPoints === 0 ||
-                          !!validationError
+                          !input.trim() || isLoading || !!validationError
                         }
                       >
                         送信する
@@ -129,8 +126,6 @@ export const ChatExercisePage: React.FC = () => {
                     content={
                       validationError
                         ? validationError
-                        : remainingPoints === 0
-                        ? "ポイントが不足しています"
                         : input.trim()
                         ? `${calculatePointCost(input)}ポイント消費`
                         : "メッセージを入力してください"

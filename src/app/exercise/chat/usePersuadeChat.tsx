@@ -1,9 +1,9 @@
-import { Message, useChat } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { characterPresets } from "@/domain/character";
 import { scenarioPresets } from "@/domain/scenario";
-import { useLocationState } from "@location-state/core";
+import { useMessageLocationState } from "@/utils/messageLocationState";
 
 // 文字数に応じたポイント消費の計算
 export const calculatePointCost = (text: string) => {
@@ -13,15 +13,13 @@ export const calculatePointCost = (text: string) => {
   return 30;
 };
 
+const MAX_TEXT_LENGTH = 5000;
+
 // ステージタイプ
 export type Stage = "導入" | "課題確認" | "提案" | "クロージング";
 
 export const usePersuadeChat = () => {
-  const [_, setLocationState] = useLocationState<Message[]>({
-    name: "messages",
-    defaultValue: [],
-    storeName: "session",
-  });
+  const [_, setLocationState] = useMessageLocationState();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,7 +40,7 @@ export const usePersuadeChat = () => {
   const {
     messages,
     input,
-    handleInputChange: originalHandleInputChange,
+    handleInputChange: handleInputChangeUseChat,
     handleSubmit: originalHandleSubmit,
     status,
     error,
@@ -92,14 +90,9 @@ export const usePersuadeChat = () => {
     }
   }, [messages]);
 
-  // 文字数制限
-  const MAX_TEXT_LENGTH = 5000;
-
-  // バリデーション付きのhandleInputChange
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
 
-    // 文字数チェック
     if (value.length > MAX_TEXT_LENGTH) {
       setValidationError(
         `${MAX_TEXT_LENGTH.toLocaleString()}文字以内で入力してください`
@@ -108,7 +101,7 @@ export const usePersuadeChat = () => {
       setValidationError(null);
     }
 
-    originalHandleInputChange(e);
+    handleInputChangeUseChat(e);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -127,7 +120,7 @@ export const usePersuadeChat = () => {
   };
 
   const handleFinish = () => {
-    setLocationState(messages);
+    setLocationState({ messages });
     router.push(
       `/exercise/result?character=${characterId}&scenario=${scenarioId}`
     );

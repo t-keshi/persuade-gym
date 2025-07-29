@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocationState } from "@location-state/core";
-import { Message } from "@ai-sdk/react";
 import { useSearchParams } from "next/navigation";
 import { characterPresets } from "@/domain/character";
 import { scenarioPresets } from "@/domain/scenario";
+import { useMessageLocationState } from "@/utils/messageLocationState";
 
 export type AnalysisResult = {
   overallScore: number;
@@ -13,12 +12,7 @@ export type AnalysisResult = {
 };
 
 export const useAnalysis = () => {
-  const [messages] = useLocationState<Message[]>({
-    name: "messages",
-    defaultValue: [],
-    storeName: "session",
-  });
-
+  const [{ messages }] = useMessageLocationState();
   const searchParams = useSearchParams();
   const characterId = searchParams.get("character") || "BEGINNER";
   const scenarioId = searchParams.get("scenario") || "new-product";
@@ -34,6 +28,7 @@ export const useAnalysis = () => {
 
   useEffect(() => {
     const fetchAnalysis = async () => {
+      console.log(messages, "m");
       if (messages.length === 0) {
         setError(new Error("対話データがありません"));
         setIsLoading(false);
@@ -42,7 +37,7 @@ export const useAnalysis = () => {
 
       try {
         setIsLoading(true);
-        const response = await fetch("/api/analyze", {
+        const response = await fetch("/api/analysis", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

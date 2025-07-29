@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 import { AppGlobalLayout } from "./_layout/AppGlobalLayout";
+import { Providers } from "./Providers";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={notoSans.variable}>
-        <AppGlobalLayout>{children}</AppGlobalLayout>
+        <Providers>
+          <AppGlobalLayout>{children}</AppGlobalLayout>
+        </Providers>
       </body>
     </html>
   );

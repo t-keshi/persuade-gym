@@ -18,7 +18,6 @@
     "@ai-sdk/react": "^1.2.12",
     "@conform-to/react": "^1.8.2",
     "@conform-to/zod": "^1.8.2",
-    "@location-state/core": "^1.2.2",
     "ai": "^4.3.19",
     "lucide-react": "^0.525.0",
     "next": "15.3.5",
@@ -44,5 +43,10 @@
     "msw": "^2.10.4",
     "typescript": "^5",
     "vitest": "^2.1.9"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
