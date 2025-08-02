@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  container,
-  type ContainerVariantProps,
+  containerRecipe,
+  type ContainerRecipeVariantProps,
 } from "../../../../styled-system/recipes";
 import { StandardComponentProps } from "@/components/types/utilityTypes";
 
@@ -10,14 +10,15 @@ type ElementProps = {
 };
 type ContainerElementProps = StandardComponentProps<ElementProps, "div">;
 
-export type ContainerProps = ContainerVariantProps & ContainerElementProps;
+export type ContainerProps = ContainerRecipeVariantProps &
+  ContainerElementProps;
 
 export const Container: React.FC<ContainerProps> = (props) => {
   const [containerVariantProps, { children, ...rest }] =
-    container.splitVariantProps(props);
+    containerRecipe.splitVariantProps(props);
 
   return (
-    <div className={container(containerVariantProps)} {...rest}>
+    <div className={containerRecipe(containerVariantProps)} {...rest}>
       {children}
     </div>
   );

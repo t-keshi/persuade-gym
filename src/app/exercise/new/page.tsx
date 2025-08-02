@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container/Container";
 import { Typography } from "@/components/ui/Typography/Typography";
 import { RadioGroup } from "@/components/ui/RadioGroup/RadioGroup";
 import { RadioGroupItem } from "@/components/ui/RadioGroup/RadioGroupItem";
-import { CHARACTER_ID, characterPresets } from "@/domain/character";
+import { beginnerCharacterPreset, characterPresets } from "@/domain/character";
 import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { scenarioPresets } from "@/domain/scenario";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 export const NewExercisePage = () => {
   const router = useRouter();
   const [selectedCharacter, setSelectedCharacter] = useState<string>(
-    CHARACTER_ID.BEGINNER
+    beginnerCharacterPreset.id
   );
   const [selectedScenario, setSelectedScenario] = useState<string>(
     scenarioPresets[0].id
@@ -38,7 +38,7 @@ export const NewExercisePage = () => {
             <VStack gap="lg" width="full">
               <RadioGroup
                 legend="1. 説得相手を選択"
-                defaultValue={CHARACTER_ID.BEGINNER}
+                defaultValue={beginnerCharacterPreset.id}
                 value={selectedCharacter}
                 onValueChange={(details) => setSelectedCharacter(details.value)}
               >

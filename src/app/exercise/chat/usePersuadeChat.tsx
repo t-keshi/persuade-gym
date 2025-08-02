@@ -1,12 +1,13 @@
 import { useChat } from "@ai-sdk/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { characterPresets } from "@/domain/character";
 import { scenarioPresets } from "@/domain/scenario";
 import { useMessageLocationState } from "@/utils/messageLocationState";
+import { getInitialMessage, MESSAGE_IDS } from "@/domain/message";
 
 // 文字数に応じたポイント消費の計算
-export const calculatePointCost = (text: string) => {
+const calculatePointCost = (text: string) => {
   const length = text.length;
   if (length <= 150) return 10;
   if (length <= 300) return 20;
@@ -32,8 +33,8 @@ export const usePersuadeChat = () => {
     scenarioPresets.find((s) => s.id === scenarioId) || scenarioPresets[0];
 
   const [remainingPoints, setRemainingPoints] = useState(100);
-  const [currentStage, setCurrentStage] = useState<Stage>("導入");
   const [validationError, setValidationError] = useState<string | null>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -44,12 +45,13 @@ export const usePersuadeChat = () => {
     handleSubmit: originalHandleSubmit,
     status,
     error,
-    append,
+    setMessages,
   } = useChat({
     api: "/api/chat",
     body: {
       character: character,
       scenario: scenario,
+      isPointsExhausted: remainingPoints === 0,
     },
     onFinish: () => {
       if (textAreaRef.current) {
@@ -57,16 +59,19 @@ export const usePersuadeChat = () => {
       }
     },
   });
-  const isLoading = status === "streaming";
+  const isLoading = status === "submitted";
 
-  // 初回メッセージの送信
+  // // 初回メッセージの設定
   useEffect(() => {
     if (messages.length === 0) {
-      const initialMessage = `こんにちは、${character.name}です。${scenario.context}`;
-      append({
-        role: "assistant",
-        content: initialMessage,
-      });
+      const initialMessage = getInitialMessage(character, scenario);
+      setMessages([
+        {
+          id: MESSAGE_IDS.INITIAL_MESSAGE_ID,
+          role: "assistant",
+          content: initialMessage,
+        },
+      ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,15 +83,16 @@ export const usePersuadeChat = () => {
     }
   }, [messages]);
 
-  // ステージの自動判定（簡易版）
-  useEffect(() => {
+  const currentStage: Stage = useMemo(() => {
     const messageCount = messages.filter((m) => m.role === "user").length;
     if (messageCount >= 6) {
-      setCurrentStage("クロージング");
+      return "クロージング";
     } else if (messageCount >= 4) {
-      setCurrentStage("提案");
+      return "提案";
     } else if (messageCount >= 2) {
-      setCurrentStage("課題確認");
+      return "課題確認";
+    } else {
+      return "導入";
     }
   }, [messages]);
 
@@ -109,12 +115,17 @@ export const usePersuadeChat = () => {
 
     if (!input.trim() || isLoading || validationError) return;
 
-    const cost = calculatePointCost(input);
-    if (remainingPoints < cost) {
-      alert("ポイントが不足しています。");
-      return;
+    if (remainingPoints <= 0) {
+      setMessages([
+        {
+          id: MESSAGE_IDS.END_MESSAGE_ID,
+          role: "assistant",
+          content: "おや、そろそろお時間のようですね。それでは、失礼致します。",
+        },
+      ]);
     }
 
+    const cost = calculatePointCost(input);
     setRemainingPoints((prev) => prev - cost);
     originalHandleSubmit(e);
   };
@@ -125,6 +136,11 @@ export const usePersuadeChat = () => {
       `/exercise/result?character=${characterId}&scenario=${scenarioId}`
     );
   };
+
+  const hasEndMessage = useMemo(
+    () => messages.some((message) => message.id === MESSAGE_IDS.END_MESSAGE_ID),
+    [messages]
+  );
 
   return {
     // 状態
@@ -137,6 +153,7 @@ export const usePersuadeChat = () => {
     character,
     scenario,
     validationError,
+    hasEndMessage,
 
     // refs
     scrollAreaRef,

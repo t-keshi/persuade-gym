@@ -21,7 +21,7 @@ export const recipes: Exclude<
   avatar: avatarRecipe,
   button: buttonRecipe,
   card: cardRecipe,
-  container: containerRecipe,
+  containerRecipe: containerRecipe,
   dialog: dialogRecipe,
   floatingActionArea: floatingActionAreaRecipe,
   header: headerRecipe,

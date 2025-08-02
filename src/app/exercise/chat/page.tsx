@@ -11,7 +11,8 @@ import { SendIcon } from "lucide-react";
 import { FinishConfirmDialog } from "./components/FinishConfirmDialog";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { Typography } from "@/components/ui/Typography/Typography";
-import { usePersuadeChat, calculatePointCost } from "./usePersuadeChat";
+import { usePersuadeChat } from "./usePersuadeChat";
+import { useCountdownTimer } from "@/utils/useCountdownTimer";
 
 export const ChatExercisePage: React.FC = () => {
   const {
@@ -23,20 +24,25 @@ export const ChatExercisePage: React.FC = () => {
     currentStage,
     character,
     validationError,
+    hasEndMessage,
     scrollAreaRef,
     textAreaRef,
     handleInputChange,
     handleSubmit,
     handleFinish,
   } = usePersuadeChat();
-  console.log(error);
+
+  const { count, isActive } = useCountdownTimer({
+    initialCount: 5,
+    onComplete: handleFinish,
+    enabled: hasEndMessage,
+  });
 
   return (
     <VStack height="contentHeight" gap="none">
       <Box flexGrow={1} overflowY="scroll" width="full" ref={scrollAreaRef}>
         <Container>
           <VStack pt="lg" pb="lg">
-            {/* ステージ表示 */}
             <Box width="full" textAlign="center" pb="md">
               <Typography>
                 現在のステージ: <strong>{currentStage}</strong> | 残りポイント:{" "}
@@ -44,7 +50,6 @@ export const ChatExercisePage: React.FC = () => {
               </Typography>
             </Box>
 
-            {/* メッセージ表示 */}
             {messages.map((message) => (
               <Flex
                 key={message.id}
@@ -65,7 +70,6 @@ export const ChatExercisePage: React.FC = () => {
               </Flex>
             ))}
 
-            {/* ローディング表示 */}
             {isLoading && (
               <Flex gap="sm" width="full" justifyContent="flex-start">
                 <Box flexShrink={0} pt="sm">
@@ -84,6 +88,14 @@ export const ChatExercisePage: React.FC = () => {
                 エラーが発生しました: {error.message}
               </Typography>
             )}
+
+            {isActive && (
+              <Box width="full" textAlign="center" pt="md">
+                <Card>
+                  <Typography>{count}秒後に結果画面に移動します...</Typography>
+                </Card>
+              </Box>
+            )}
           </VStack>
         </Container>
       </Box>
@@ -97,7 +109,7 @@ export const ChatExercisePage: React.FC = () => {
                   ref={textAreaRef}
                   value={input}
                   onChange={handleInputChange}
-                  placeholder="メッセージを入力..."
+                  placeholder="メッセージを入力...(ctr + Enterで送信)"
                   disabled={isLoading || remainingPoints === 0}
                   onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -126,9 +138,9 @@ export const ChatExercisePage: React.FC = () => {
                     content={
                       validationError
                         ? validationError
-                        : input.trim()
-                        ? `${calculatePointCost(input)}ポイント消費`
-                        : "メッセージを入力してください"
+                        : input.trim() === ""
+                        ? "メッセージを入力してください"
+                        : null
                     }
                   />
                   <FinishConfirmDialog

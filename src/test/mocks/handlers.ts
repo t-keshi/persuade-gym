@@ -5,7 +5,7 @@ import { globalError } from "./globalError";
 import { chatMock } from "./chatMock";
 
 export const handlers = [
-  globalDelay(10000),
+  globalDelay(1000),
   globalError(),
   analysisMock,
   chatMock,
