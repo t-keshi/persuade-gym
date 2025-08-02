@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { characterPresets } from "@/domain/character";
-import { scenarioPresets } from "@/domain/scenario";
+import { characterPresets, beginnerCharacterPreset } from "@/domain/character";
+import {
+  scenarioPresets,
+  SCENARIO_ID,
+  newProductScenarioPreset,
+} from "@/domain/scenario";
 import { useMessageLocationState } from "@/utils/messageLocationState";
+import { useAsync } from "@/utils/useAsync";
 
 export type AnalysisResult = {
   overallScore: number;
@@ -14,61 +18,47 @@ export type AnalysisResult = {
 export const useAnalysis = () => {
   const [{ messages }] = useMessageLocationState();
   const searchParams = useSearchParams();
-  const characterId = searchParams.get("character") || "BEGINNER";
-  const scenarioId = searchParams.get("scenario") || "new-product";
+  const characterId =
+    searchParams.get("character") || beginnerCharacterPreset.id;
+  const scenarioId = searchParams.get("scenario") || SCENARIO_ID.NEW_PRODUCT;
 
   const character =
-    characterPresets.find((c) => c.id === characterId) || characterPresets[0];
+    characterPresets.find((c) => c.id === characterId) ||
+    beginnerCharacterPreset;
   const scenario =
-    scenarioPresets.find((s) => s.id === scenarioId) || scenarioPresets[0];
+    scenarioPresets.find((s) => s.id === scenarioId) ||
+    newProductScenarioPreset;
 
-  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const state = useAsync(async () => {
+    console.log(messages, "m");
+    if (messages.length === 0) {
+      throw new Error("対話データがありません");
+    }
 
-  useEffect(() => {
-    const fetchAnalysis = async () => {
-      console.log(messages, "m");
-      if (messages.length === 0) {
-        setError(new Error("対話データがありません"));
-        setIsLoading(false);
-        return;
-      }
+    const response = await fetch("/api/analysis", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages,
+        character,
+        scenario,
+      }),
+    });
 
-      try {
-        setIsLoading(true);
-        const response = await fetch("/api/analysis", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            messages,
-            character,
-            scenario,
-          }),
-        });
+    if (!response.ok) {
+      throw new Error("分析に失敗しました");
+    }
 
-        if (!response.ok) {
-          throw new Error("分析に失敗しました");
-        }
-
-        const data = await response.json();
-        setAnalysis(data);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error("Unknown error"));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAnalysis();
+    const data = await response.json();
+    return data as AnalysisResult;
   }, [messages, character, scenario]);
 
   return {
-    analysis,
-    isLoading,
-    error,
+    analysis: state.value,
+    isLoading: state.loading,
+    error: state.error,
     messages,
     character,
     scenario,

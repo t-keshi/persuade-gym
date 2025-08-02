@@ -10,38 +10,12 @@ import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingA
 import { ResultLoading } from "./components/ResultLoading";
 import { useAnalysis } from "./useAnalysis";
 import { Card } from "@/components/ui/Card/Card";
-import { AlertCircle } from "lucide-react";
 
 const ResultPage: React.FC = () => {
-  const { analysis, isLoading, error } = useAnalysis();
+  const { analysis, isLoading } = useAnalysis();
 
-  if (isLoading) {
+  if (isLoading || !analysis) {
     return <ResultLoading />;
-  }
-
-  if (error || !analysis) {
-    return (
-      <VStack height="contentHeight" gap="none">
-        <Box flexGrow={1} width="full">
-          <Container>
-            <Box p="lg">
-              <Card>
-                <VStack gap="md" alignItems="center">
-                  <AlertCircle size={48} color="red" />
-                  <Typography variant="h3">エラーが発生しました</Typography>
-                  <Typography>
-                    {error?.message || "分析結果を取得できませんでした"}
-                  </Typography>
-                  <Button as="link" href="/exercise/new">
-                    最初からやり直す
-                  </Button>
-                </VStack>
-              </Card>
-            </Box>
-          </Container>
-        </Box>
-      </VStack>
-    );
   }
 
   return (
