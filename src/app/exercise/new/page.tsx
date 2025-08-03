@@ -1,17 +1,22 @@
 "use client";
 
-import { Button } from "@/components/ui/Button/Button";
+import { useState } from "react";
+
+import { useRouter } from "next/navigation";
+
 import { Box, HStack, VStack } from "../../../../styled-system/jsx";
+
+import { Avatar } from "@/components/ui/Avatar/Avatar";
+import { Button } from "@/components/ui/Button/Button";
 import { Container } from "@/components/ui/Container/Container";
-import { Typography } from "@/components/ui/Typography/Typography";
+import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
 import { RadioGroup } from "@/components/ui/RadioGroup/RadioGroup";
 import { RadioGroupItem } from "@/components/ui/RadioGroup/RadioGroupItem";
+import { Typography } from "@/components/ui/Typography/Typography";
 import { beginnerCharacterPreset, characterPresets } from "@/domain/character";
-import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { scenarioPresets } from "@/domain/scenario";
-import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+
 
 export const NewExercisePage = () => {
   const router = useRouter();

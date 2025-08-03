@@ -1,8 +1,11 @@
-import { generateObject } from "ai";
-import { NextRequest, NextResponse } from "next/server";
 import { openai } from "@ai-sdk/openai";
-import { createAnalysisPrompt, formatConversation } from "@/domain/prompts";
+import { generateObject } from "ai";
+import { NextResponse } from "next/server";
+
+import type { NextRequest} from "next/server";
+
 import { analysisResultSchema } from "@/domain/analysis";
+import { createAnalysisPrompt, formatConversation } from "@/domain/prompts";
 import { middleware } from "@/utils/middleware";
 
 export const POST = middleware(async (req: NextRequest) => {

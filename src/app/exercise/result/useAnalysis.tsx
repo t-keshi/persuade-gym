@@ -1,4 +1,5 @@
 import { useSearchParams } from "next/navigation";
+
 import { characterPresets, beginnerCharacterPreset } from "@/domain/character";
 import {
   scenarioPresets,

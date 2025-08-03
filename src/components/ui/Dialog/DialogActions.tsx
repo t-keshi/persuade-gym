@@ -1,7 +1,10 @@
 import React from "react";
-import { dialog } from "../../../../styled-system/recipes";
+
 import { useDialogContext } from "@ark-ui/react/dialog";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
+import { dialog } from "../../../../styled-system/recipes";
+
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   footerContent?: React.ReactNode;

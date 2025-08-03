@@ -1,10 +1,14 @@
 import React from "react";
+
 import {
-  loading,
-  LoadingVariantProps,
+  loading
 } from "../../../../styled-system/recipes";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import { RobotIcon } from "./RobotIcon";
+
+import type {
+  LoadingVariantProps} from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   loadingText?: string;

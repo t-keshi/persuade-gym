@@ -1,9 +1,12 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import {
-  informationPanel,
-  InformationPanelVariantProps,
+  informationPanel
 } from "../../../../styled-system/recipes";
+
+import type {
+  InformationPanelVariantProps} from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type InformationPanelElementProps = {
   children: React.ReactNode;

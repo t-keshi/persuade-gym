@@ -1,9 +1,13 @@
 import React from "react";
+
 import { Dialog as ArkDialog } from "@ark-ui/react/dialog";
 import { Portal } from "@ark-ui/react/portal";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
 import { XIcon } from "lucide-react";
-import { dialog, DialogVariantProps } from "../../../../styled-system/recipes";
+
+import { dialog } from "../../../../styled-system/recipes";
+
+import type { DialogVariantProps } from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   title: string;

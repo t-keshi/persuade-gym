@@ -1,10 +1,12 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import { useChat } from "@ai-sdk/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+
 import { characterPresets } from "@/domain/character";
+import { getInitialMessage, MESSAGE_IDS } from "@/domain/message";
 import { scenarioPresets } from "@/domain/scenario";
 import { useMessageLocationState } from "@/utils/messageLocationState";
-import { getInitialMessage, MESSAGE_IDS } from "@/domain/message";
 
 // 文字数に応じたポイント消費の計算
 const calculatePointCost = (text: string) => {

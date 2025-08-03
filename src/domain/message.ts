@@ -1,5 +1,5 @@
-import { Character } from "./character";
-import { Scenario } from "./scenario";
+import type { Character } from "./character";
+import type { Scenario } from "./scenario";
 
 export const MESSAGE_IDS = {
   INITIAL_MESSAGE_ID: "initial-message",

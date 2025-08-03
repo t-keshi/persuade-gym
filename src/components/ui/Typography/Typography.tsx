@@ -1,9 +1,12 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import {
-  typography,
-  TypographyVariantProps,
+  typography
 } from "../../../../styled-system/recipes";
+
+import type {
+  TypographyVariantProps} from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   children: React.ReactNode;

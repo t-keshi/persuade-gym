@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+import type { NextRequest} from "next/server";
 
 export const middleware = <T>(asyncFn: (req: NextRequest) => Promise<T>) => {
   return async (req: NextRequest): Promise<T | NextResponse> => {

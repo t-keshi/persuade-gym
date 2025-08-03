@@ -1,5 +1,7 @@
 import React from "react";
+
 import { HStack, VStack } from "../../../../../styled-system/jsx";
+
 import { Typography } from "@/components/ui/Typography/Typography";
 
 type GradingScaleProps = {

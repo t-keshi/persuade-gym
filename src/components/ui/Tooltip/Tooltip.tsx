@@ -1,12 +1,16 @@
 import {
-  Tooltip as ArkTooltip,
-  TooltipRootProps as ArkTooltipRootProps,
+  Tooltip as ArkTooltip
 } from "@ark-ui/react/tooltip";
+
 import {
-  tooltip,
-  TooltipVariantProps,
+  tooltip
 } from "../../../../styled-system/recipes";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
+import type {
+  TooltipVariantProps} from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
+import type {
+  TooltipRootProps as ArkTooltipRootProps} from "@ark-ui/react/tooltip";
 
 type ElementProps = {
   trigger: React.ReactNode;

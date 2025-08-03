@@ -1,7 +1,8 @@
-import { analysisResultSchema } from "@/domain/analysis";
 import { generateObject } from "ai";
 import { MockLanguageModelV1 } from "ai/test";
 import { http, HttpResponse } from "msw";
+
+import { analysisResultSchema } from "@/domain/analysis";
 
 const mockLanguageModel = new MockLanguageModelV1({
   defaultObjectGenerationMode: "json",

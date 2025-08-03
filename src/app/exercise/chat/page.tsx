@@ -1,17 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/Button/Button";
+import { SendIcon } from "lucide-react";
+
 import { Box, Flex, HStack, VStack } from "../../../../styled-system/jsx";
+
+import { FinishConfirmDialog } from "./components/FinishConfirmDialog";
+import { usePersuadeChat } from "./usePersuadeChat";
+
 import { Avatar } from "@/components/ui/Avatar/Avatar";
+import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
 import { Container } from "@/components/ui/Container/Container";
-import { TextArea } from "@/components/ui/TextArea/TextArea";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
-import { SendIcon } from "lucide-react";
-import { FinishConfirmDialog } from "./components/FinishConfirmDialog";
+import { TextArea } from "@/components/ui/TextArea/TextArea";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { Typography } from "@/components/ui/Typography/Typography";
-import { usePersuadeChat } from "./usePersuadeChat";
 import { useCountdownTimer } from "@/utils/useCountdownTimer";
 
 export const ChatExercisePage: React.FC = () => {

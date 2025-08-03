@@ -1,8 +1,9 @@
 "use client";
 
+import React from "react";
+
 import { enableMocking } from "@/test/mocks/enableMocking";
 import { MessageLocationStateProvider } from "@/utils/messageLocationState";
-import React from "react";
 
 type Props = { children: React.ReactNode };
 

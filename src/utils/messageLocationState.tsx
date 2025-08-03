@@ -1,6 +1,9 @@
-import { Message } from "ai";
-import { createCtx } from "./createCtx";
 import { useState } from "react";
+
+import { createCtx } from "./createCtx";
+
+import type { Message } from "ai";
+
 
 const [LocationStateProvider, useLocationState] = createCtx<
   [{ messages: Message[] }, (messages: { messages: Message[] }) => void]

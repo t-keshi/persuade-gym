@@ -1,8 +1,9 @@
 import { setupWorker } from "msw/browser";
+
 import { analysisMock } from "./analysisMock";
+import { chatMock } from "./chatMock";
 import { globalDelay } from "./globalDelay";
 import { globalError } from "./globalError";
-import { chatMock } from "./chatMock";
 
 export const handlers = [
   globalDelay(1000),

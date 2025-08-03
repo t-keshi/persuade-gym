@@ -1,5 +1,6 @@
 import { defineSlotRecipe } from "@pandacss/dev";
-import { SlotRecipeConfig } from "../../../../styled-system/types";
+
+import type { SlotRecipeConfig } from "../../../../styled-system/types";
 
 export const loadingRecipe = defineSlotRecipe({
   className: "loading",

@@ -1,7 +1,9 @@
 import React from "react";
+
 import { card } from "../../../../styled-system/recipes";
-import { CardVariantProps } from "../../../../styled-system/recipes";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
+import type { CardVariantProps } from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   children: React.ReactNode;

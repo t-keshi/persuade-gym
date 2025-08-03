@@ -1,15 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/Button/Button";
 import React from "react";
+
 import { Box, Stack, VStack } from "../../../../styled-system/jsx";
-import { Typography } from "@/components/ui/Typography/Typography";
-import { Container } from "@/components/ui/Container/Container";
+
 import { GradingScale } from "./components/GradingScale";
-import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
 import { ResultLoading } from "./components/ResultLoading";
 import { useAnalysis } from "./useAnalysis";
+
+import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
+import { Container } from "@/components/ui/Container/Container";
+import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
+import { Typography } from "@/components/ui/Typography/Typography";
 
 const ResultPage: React.FC = () => {
   const { analysis, isLoading } = useAnalysis();

@@ -1,5 +1,5 @@
-import { Character } from "@/domain/character";
-import { Scenario } from "@/domain/scenario";
+import type { Character } from "@/domain/character";
+import type { Scenario } from "@/domain/scenario";
 
 /**
  * チャット用システムプロンプトのテンプレート

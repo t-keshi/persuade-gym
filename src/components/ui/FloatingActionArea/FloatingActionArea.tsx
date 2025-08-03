@@ -2,7 +2,8 @@ import {
   floatingActionArea,
   type FloatingActionAreaVariantProps,
 } from "../../../../styled-system/recipes";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   children: React.ReactNode;

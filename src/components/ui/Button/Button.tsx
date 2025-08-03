@@ -1,8 +1,13 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import { LoaderCircle } from "lucide-react";
-import Link, { LinkProps } from "next/link";
-import { button, ButtonVariantProps } from "../../../../styled-system/recipes";
+import Link from "next/link";
+
+import { button } from "../../../../styled-system/recipes";
+
+import type { ButtonVariantProps } from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
+import type { LinkProps } from "next/link";
 
 type ElementPropsForAnchor = {
   as: "link";

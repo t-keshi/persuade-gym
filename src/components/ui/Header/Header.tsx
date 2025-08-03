@@ -1,6 +1,9 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
-import { header, HeaderVariantProps } from "../../../../styled-system/recipes";
+
+import { header } from "../../../../styled-system/recipes";
+
+import type { HeaderVariantProps } from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   logo: React.ReactNode;

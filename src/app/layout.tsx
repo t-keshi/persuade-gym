@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
+
 import "./globals.css";
-import { AppGlobalLayout } from "./_layout/AppGlobalLayout";
 import { Providers } from "./Providers";
+import { AppGlobalLayout } from "./_layout/AppGlobalLayout";
+
+import type { Metadata } from "next";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",

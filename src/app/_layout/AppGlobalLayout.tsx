@@ -1,10 +1,14 @@
-import { Header } from "@/components/ui/Header/Header";
 import React from "react";
-import { Logo } from "./Logo";
-import { Box } from "../../../styled-system/jsx";
+
 import Link from "next/link";
-import { Typography } from "@/components/ui/Typography/Typography";
+
 import { css } from "../../../styled-system/css";
+import { Box } from "../../../styled-system/jsx";
+
+import { Logo } from "./Logo";
+
+import { Header } from "@/components/ui/Header/Header";
+import { Typography } from "@/components/ui/Typography/Typography";
 
 type AppGlobalLayoutProps = { children: React.ReactNode };
 

@@ -1,8 +1,9 @@
+import React from "react";
+
 import { Button } from "@/components/ui/Button/Button";
 import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { DialogActions } from "@/components/ui/Dialog/DialogActions";
 import { DialogDescription } from "@/components/ui/Dialog/DialogDescription";
-import React from "react";
 
 type Props = {
   trigger: React.ReactNode;

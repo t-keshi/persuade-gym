@@ -1,7 +1,11 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
-import { avatar, AvatarVariantProps } from "../../../../styled-system/recipes";
+
 import Image from "next/image";
+
+import { avatar } from "../../../../styled-system/recipes";
+
+import type { AvatarVariantProps } from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps =
   | {

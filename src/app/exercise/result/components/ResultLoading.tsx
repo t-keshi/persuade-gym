@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+
+import { Box, Stack, VStack } from "../../../../../styled-system/jsx";
+
+import { Card } from "@/components/ui/Card/Card";
 import { Loading } from "@/components/ui/Loading/Loading";
 import { Typography } from "@/components/ui/Typography/Typography";
-import { Card } from "@/components/ui/Card/Card";
-import { Box, Stack, VStack } from "../../../../../styled-system/jsx";
 import { persuasionTechniques } from "@/domain/persuasionTechniques";
 
 export const ResultLoading: React.FC = () => {

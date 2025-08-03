@@ -1,6 +1,7 @@
-import { Typography } from "@/components/ui/Typography/Typography";
 import { Box, Flex, Stack } from "../../styled-system/jsx";
+
 import { Button } from "@/components/ui/Button/Button";
+import { Typography } from "@/components/ui/Typography/Typography";
 
 const HomePage = () => {
   return (

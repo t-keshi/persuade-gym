@@ -1,11 +1,14 @@
 import React from "react";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import {
-  textArea,
-  TextAreaVariantProps,
+  textArea
 } from "../../../../styled-system/recipes";
 import { ariaAttr, dataAttr } from "../utils/attributes";
-import { FormElementProps } from "../utils/formElementProps";
+
+import type {
+  TextAreaVariantProps} from "../../../../styled-system/recipes";
+import type { FormElementProps } from "../utils/formElementProps";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   minRows?: 1 | 2 | 3;

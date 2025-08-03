@@ -1,10 +1,14 @@
 import React from "react";
+
 import { RadioGroup as ArkRadioGroup } from "@ark-ui/react/radio-group";
-import { StandardComponentProps } from "@/components/types/utilityTypes";
+
 import {
-  radioGroup,
-  RadioGroupVariantProps,
+  radioGroup
 } from "../../../../styled-system/recipes";
+
+import type {
+  RadioGroupVariantProps} from "../../../../styled-system/recipes";
+import type { StandardComponentProps } from "@/components/types/utilityTypes";
 
 type ElementProps = {
   legend: string;

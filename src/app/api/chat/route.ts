@@ -1,10 +1,13 @@
-import { streamText, Message } from "ai";
-import { Character } from "@/domain/character";
-import { Scenario } from "@/domain/scenario";
-import { errorHandler } from "@/utils/errorHandler";
 import { openai } from "@ai-sdk/openai";
+import { streamText } from "ai";
+
+import type { Character } from "@/domain/character";
+import type { Scenario } from "@/domain/scenario";
+import type { Message } from "ai";
+import type { NextRequest } from "next/server";
+
 import { createChatSystemPrompt } from "@/domain/prompts";
-import { NextRequest } from "next/server";
+import { errorHandler } from "@/utils/errorHandler";
 import { middleware } from "@/utils/middleware";
 
 export const POST = middleware(async (req: NextRequest) => {

@@ -1,5 +1,6 @@
 import { defineRecipe } from "@pandacss/dev";
-import { RecipeConfig } from "../../../../styled-system/types";
+
+import type { RecipeConfig } from "../../../../styled-system/types";
 
 export const containerRecipe = defineRecipe({
   className: "container",
