@@ -1,8 +1,8 @@
-import { openai } from "@ai-sdk/openai";
+import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { NextResponse } from "next/server";
 
-import type { NextRequest} from "next/server";
+import type { NextRequest } from "next/server";
 
 import { analysisResultSchema } from "@/domain/analysis";
 import { createAnalysisPrompt, formatConversation } from "@/domain/prompts";
@@ -22,7 +22,7 @@ export const POST = middleware(async (req: NextRequest) => {
   });
 
   const result = await generateObject({
-    model: openai("gpt-4-turbo"),
+    model: anthropic("claude-sonnet-4-20250514"),
     schema: analysisResultSchema,
     prompt,
   });

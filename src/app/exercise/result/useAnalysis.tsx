@@ -18,6 +18,7 @@ export type AnalysisResult = {
 
 export const useAnalysis = () => {
   const [{ messages }] = useMessageLocationState();
+  console.log(messages, "messages in useAnalysis");
   const searchParams = useSearchParams();
   const characterId =
     searchParams.get("character") || beginnerCharacterPreset.id;

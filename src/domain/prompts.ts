@@ -94,13 +94,37 @@ ${conversation}
  * メッセージを対話形式の文字列に変換
  */
 export const formatConversation = (
-  messages: Array<{ role: string; content: string }>,
+  messages: Array<{
+    role: string;
+    content?: string;
+    parts?: Array<{ type: string; text?: string }>;
+  }>,
   characterName: string
 ): string => {
   return messages
-    .map(
-      (msg) =>
-        `${msg.role === "user" ? "ユーザー" : characterName}: ${msg.content}`
-    )
+    .map((msg) => {
+      // v5形式のメッセージ（parts配列）から内容を取得
+      let messageContent = "";
+
+      if (msg.parts && Array.isArray(msg.parts)) {
+        // parts配列からテキストを抽出
+        messageContent = msg.parts
+          .filter((part) => part.type === "text" && part.text)
+          .map((part) => part.text)
+          .join("");
+      } else if (msg.content) {
+        // 旧形式のメッセージ（contentプロパティ）にも対応
+        messageContent = msg.content;
+      }
+
+      if (!messageContent) {
+        return null; // 内容がない場合はスキップ
+      }
+
+      return `${
+        msg.role === "user" ? "ユーザー" : characterName
+      }: ${messageContent}`;
+    })
+    .filter(Boolean) // nullを除外
     .join("\n\n");
 };

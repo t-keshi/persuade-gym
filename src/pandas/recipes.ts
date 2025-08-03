@@ -14,7 +14,6 @@ import { textAreaRecipe } from "@/components/ui/TextArea/TextArea.recipe";
 import { tooltipRecipe } from "@/components/ui/Tooltip/Tooltip.recipe";
 import { typographyRecipe } from "@/components/ui/Typography/Typography.recipe";
 
-
 export const recipes: Exclude<
   Exclude<Config["theme"], undefined>["extend"],
   undefined
@@ -22,7 +21,7 @@ export const recipes: Exclude<
   avatar: avatarRecipe,
   button: buttonRecipe,
   card: cardRecipe,
-  containerRecipe: containerRecipe,
+  container: containerRecipe,
   dialog: dialogRecipe,
   floatingActionArea: floatingActionAreaRecipe,
   header: headerRecipe,

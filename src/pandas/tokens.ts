@@ -142,6 +142,7 @@ export const tokens = defineTokens({
     },
   },
   zIndex: {
+    info: { value: 10 },
     header: { value: 1100 },
     modal: { value: 1300 },
     tooltip: { value: 1500 },

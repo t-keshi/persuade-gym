@@ -1,5 +1,5 @@
 import { simulateReadableStream, streamText } from "ai";
-import { MockLanguageModelV1 } from "ai/test";
+import { MockLanguageModelV2 } from "ai/test";
 import { http } from "msw";
 
 // 会話の段階に応じた応答を定義
@@ -28,25 +28,31 @@ const createMockLanguageModel = (responseText: string) => {
     .split(/([、。！？])/g)
     .filter((chunk) => chunk.length > 0);
 
-  return new MockLanguageModelV1({
+  return new MockLanguageModelV2({
     doStream: async () => ({
       stream: simulateReadableStream({
         initialDelayInMs: 300, // 初回の遅延を追加してリアルさを演出
         chunkDelayInMs: 80, // チャンク間の遅延で自然な速度を再現
         chunks: [
+          { type: "text-start" as const, id: "text-1" },
           ...chunks.map((chunk) => ({
             type: "text-delta" as const,
-            textDelta: chunk,
+            id: "text-1",
+            delta: chunk,
           })),
+          { type: "text-end" as const, id: "text-1" },
           {
             type: "finish" as const,
-            finishReason: "stop",
+            finishReason: "stop" as const,
             logprobs: undefined,
-            usage: { completionTokens: responseText.length, promptTokens: 50 },
+            usage: {
+              inputTokens: 50,
+              outputTokens: responseText.length,
+              totalTokens: 50 + responseText.length,
+            },
           },
         ],
       }),
-      rawCall: { rawPrompt: null, rawSettings: {} },
     }),
   });
 };
@@ -62,7 +68,10 @@ export const chatMock = http.post("/api/chat", async (req) => {
   responseIndex++;
 
   const mockLanguageModel = createMockLanguageModel(currentResponse);
-  const response = streamText({ model: mockLanguageModel, prompt: "test" });
+  const response = streamText({
+    model: mockLanguageModel,
+    prompt: "test",
+  });
 
-  return response.toDataStreamResponse();
+  return response.toUIMessageStreamResponse();
 });

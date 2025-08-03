@@ -1,9 +1,16 @@
+import { defineConfig } from "@pandacss/dev";
+import pandaBasePreset from "@pandacss/preset-base";
+import pandaPreset from "@pandacss/preset-panda";
+
 import { keyframes } from "@/pandas/keyframes";
 import { recipes } from "@/pandas/recipes";
 import { tokens } from "@/pandas/tokens";
-import { defineConfig } from "@pandacss/dev";
+
+const { container: _, ...pandaBasePresetPatterns } = pandaBasePreset.patterns;
 
 export default defineConfig({
+  presets: [pandaPreset],
+  eject: true,
   preflight: true,
   strictTokens: true,
   include: ["./src/**/*.{ts,tsx}"],
@@ -15,13 +22,20 @@ export default defineConfig({
       recipes,
     },
   },
+  conditions: {
+    extend: {
+      ...pandaBasePreset.conditions,
+    },
+  },
   patterns: {
-    container: {
-      jsxName: "DeprecatedContainer",
+    extend: {
+      ...pandaBasePresetPatterns,
     },
   },
   utilities: {
-    container: {},
+    extend: {
+      ...pandaBasePreset.utilities,
+    },
   },
   outdir: "styled-system",
   jsxFramework: "react",

@@ -1,8 +1,8 @@
-# Vercel AI SDK UI ガイド
+# Vercel AI SDK v5 ガイド
 
 ## 概要
 
-Vercel AI SDK UI は、インタラクティブなチャット、テキスト補完、アシスタントアプリケーションを簡単に構築するためのフレームワーク非依存のツールキットです。
+Vercel AI SDK v5 は、インタラクティブなチャット、テキスト補完、アシスタントアプリケーションを簡単に構築するためのフレームワーク非依存のツールキットです。v5 では、メッセージ型システムの改善、ストリーミングアーキテクチャの刷新、ツール呼び出しの強化など、多くの改善が行われています。
 
 ## Next.js App Router クイックスタート
 
@@ -24,7 +24,7 @@ App Router と Tailwind CSS を使用するよう選択してください。
 #### 2. 依存関係のインストール
 
 ```bash
-pnpm add ai@beta @ai-sdk/react@beta @ai-sdk/openai@beta zod
+pnpm add ai @ai-sdk/react @ai-sdk/openai zod
 ```
 
 #### 3. OpenAI API キーの設定
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 - `convertToModelMessages` で `ModelMessage[]` に変換（モデルが期待する形式）
 - `toUIMessageStreamResponse()` でストリーミングレスポンスを返す
 
-#### UI の実装
+#### UI の実装（v5 の新しい方式）
 
 `app/page.tsx`:
 
@@ -113,12 +113,18 @@ export default function Chat() {
 }
 ```
 
-### ツールの実装
+**v5 の重要な変更点：**
+
+- `useChat`は入力状態を管理しなくなりました（`input`、`handleInputChange`、`handleSubmit`が削除）
+- メッセージは`content`プロパティの代わりに`parts`配列を使用
+- `append`は`sendMessage`に名前変更
+
+### ツールの実装（v5 の新しい方式）
 
 #### Route Handler でツールを定義
 
 ```tsx
-import { tool } from "ai";
+import { tool, stepCountIs } from "ai";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -127,9 +133,12 @@ export async function POST(req: Request) {
   const result = streamText({
     model: openai("gpt-4o"),
     messages: convertToModelMessages(messages),
+    // v5: maxStepsの代わりにstopWhenを使用
+    stopWhen: stepCountIs(5),
     tools: {
       weather: tool({
         description: "Get the weather in a location (fahrenheit)",
+        // v5: parametersからinputSchemaに変更
         inputSchema: z.object({
           location: z.string().describe("The location to get the weather for"),
         }),
@@ -162,14 +171,13 @@ export async function POST(req: Request) {
 }
 ```
 
-#### UI でツール結果を表示
+#### UI でツール結果を表示（v5 の新しい方式）
 
 ```tsx
 export default function Chat() {
   const [input, setInput] = useState("");
-  const { messages, sendMessage } = useChat({
-    maxSteps: 5, // マルチステップツール呼び出しを有効化
-  });
+  const { messages, sendMessage } = useChat();
+  // v5: maxStepsはクライアント側では削除され、サーバー側のstopWhenで制御
 
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
@@ -204,16 +212,25 @@ export default function Chat() {
 各メッセージには `parts` 配列があり、モデルが生成したすべての内容を順序付きで含みます：
 
 - `text`: テキストコンテンツ
-- `tool-{toolName}`: ツール呼び出しと結果
-- その他のタイプ（reasoning など）
+- `tool-{toolName}`: ツール呼び出しと結果（v5 で型安全性が向上）
+- `reasoning`: 推論内容
+- `file`: ファイル添付
+- `dynamic-tool`: 動的ツール呼び出し（v5 の新機能）
 
-#### マルチステップツール呼び出し
+#### マルチステップツール呼び出し（v5 の変更）
 
-`maxSteps` オプションを使用することで、モデルは：
+v5 では`maxSteps`が削除され、`stopWhen`を使用します：
 
-1. ツールを呼び出す
-2. ツールの結果を受け取る
-3. その結果を使って追加の生成を行う
+```tsx
+// サーバー側で制御
+const result = streamText({
+  model: openai("gpt-4o"),
+  messages,
+  stopWhen: stepCountIs(5), // 5ステップで停止
+  // または特定のツールが呼ばれたら停止
+  // stopWhen: hasToolCall('finalizeTask'),
+});
+```
 
 これにより、複雑な対話や連続的なツール使用が可能になります。
 

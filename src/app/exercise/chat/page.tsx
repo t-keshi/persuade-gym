@@ -27,7 +27,7 @@ export const ChatExercisePage: React.FC = () => {
     currentStage,
     character,
     validationError,
-    hasEndMessage,
+    isExerciseEnded,
     scrollAreaRef,
     textAreaRef,
     handleInputChange,
@@ -36,23 +36,38 @@ export const ChatExercisePage: React.FC = () => {
   } = usePersuadeChat();
 
   const { count, isActive } = useCountdownTimer({
-    initialCount: 5,
+    initialCount: 10,
     onComplete: handleFinish,
-    enabled: hasEndMessage,
+    enabled: isExerciseEnded,
   });
 
   return (
-    <VStack height="contentHeight" gap="none">
+    <VStack height="contentHeight" gap="none" position="relative">
+      <Box
+        width="full"
+        borderBottom="1px solid"
+        borderColor="divider"
+        backgroundColor="background.default"
+        position="sticky"
+        top="none"
+        zIndex="info"
+        py="sm"
+      >
+        <Container>
+          <HStack justifyContent="center" gap="lg">
+            <Typography>
+              現在のステージ: <strong>{currentStage}</strong>
+            </Typography>
+            <Typography>
+              残りポイント: <strong>{remainingPoints}</strong>
+            </Typography>
+          </HStack>
+        </Container>
+      </Box>
+
       <Box flexGrow={1} overflowY="scroll" width="full" ref={scrollAreaRef}>
         <Container>
           <VStack pt="lg" pb="lg">
-            <Box width="full" textAlign="center" pb="md">
-              <Typography>
-                現在のステージ: <strong>{currentStage}</strong> | 残りポイント:{" "}
-                <strong>{remainingPoints}</strong>
-              </Typography>
-            </Box>
-
             {messages.map((message) => (
               <Flex
                 key={message.id}
@@ -68,7 +83,13 @@ export const ChatExercisePage: React.FC = () => {
                   </Box>
                 )}
                 <Box maxWidth="10/12" tabIndex={-1}>
-                  <Card>{message.content}</Card>
+                  <Card>
+                    {message.parts?.map((part, i) =>
+                      part.type === "text" ? (
+                        <span key={`${message.id}-part-${i}`}>{part.text}</span>
+                      ) : null
+                    )}
+                  </Card>
                 </Box>
               </Flex>
             ))}
@@ -95,7 +116,9 @@ export const ChatExercisePage: React.FC = () => {
             {isActive && (
               <Box width="full" textAlign="center" pt="md">
                 <Card>
-                  <Typography>{count}秒後に結果画面に移動します...</Typography>
+                  <Typography>
+                    そろそろ終了です。{count}秒後に結果画面に移動します...
+                  </Typography>
                 </Card>
               </Box>
             )}
@@ -132,7 +155,10 @@ export const ChatExercisePage: React.FC = () => {
                         size="lg"
                         leftIcon={<SendIcon />}
                         disabled={
-                          !input.trim() || isLoading || !!validationError
+                          !input ||
+                          !input.trim() ||
+                          isLoading ||
+                          !!validationError
                         }
                       >
                         送信する
@@ -141,7 +167,7 @@ export const ChatExercisePage: React.FC = () => {
                     content={
                       validationError
                         ? validationError
-                        : input.trim() === ""
+                        : !input || !input.trim()
                         ? "メッセージを入力してください"
                         : null
                     }

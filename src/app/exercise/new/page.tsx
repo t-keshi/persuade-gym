@@ -16,8 +16,6 @@ import { Typography } from "@/components/ui/Typography/Typography";
 import { beginnerCharacterPreset, characterPresets } from "@/domain/character";
 import { scenarioPresets } from "@/domain/scenario";
 
-
-
 export const NewExercisePage = () => {
   const router = useRouter();
   const [selectedCharacter, setSelectedCharacter] = useState<string>(
