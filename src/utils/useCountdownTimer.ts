@@ -13,16 +13,26 @@ export const useCountdownTimer = ({
 }: UseCountdownTimerOptions) => {
   const [count, setCount] = useState(initialCount);
   const [isActive, setIsActive] = useState(false);
+  const [shouldComplete, setShouldComplete] = useState(false);
   const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
 
+  // onCompleteを別のuseEffectで呼び出す
+  useEffect(() => {
+    if (shouldComplete && onCompleteRef.current) {
+      onCompleteRef.current();
+      setShouldComplete(false);
+    }
+  }, [shouldComplete]);
+
   useEffect(() => {
     if (!enabled) {
       setCount(initialCount);
       setIsActive(false);
+      setShouldComplete(false);
       return;
     }
 
@@ -33,9 +43,8 @@ export const useCountdownTimer = ({
       setCount((prevCount) => {
         if (prevCount <= 1) {
           clearInterval(interval);
-          if (onCompleteRef.current) {
-            onCompleteRef.current();
-          }
+          // 直接呼び出す代わりにフラグを設定
+          setShouldComplete(true);
           return 0;
         }
         return prevCount - 1;
