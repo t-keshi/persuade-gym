@@ -13,7 +13,7 @@ export const containerRecipe = defineRecipe({
   variants: {
     size: {
       sm: {
-        maxWidth: "[640]",
+        maxWidth: "[640px]",
       },
       md: {
         maxWidth: "[768px]",

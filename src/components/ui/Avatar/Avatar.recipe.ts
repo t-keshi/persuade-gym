@@ -16,16 +16,16 @@ export const avatarRecipe = defineRecipe({
   variants: {
     size: {
       sm: {
-        width: "[32]",
-        height: "[32]",
+        width: "[32px]",
+        height: "[32px]",
       },
       md: {
-        width: "[48]",
-        height: "[48]",
+        width: "[48px]",
+        height: "[48px]",
       },
       lg: {
-        width: "[56]",
-        height: "[56]",
+        width: "[56px]",
+        height: "[56px]",
       },
     },
   },
