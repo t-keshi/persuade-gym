@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "panda codegen",
     "panda:watch": "panda -w",
-    "dev": "rm -rf .next && next dev --turbopack",
+    "dev": "rm -rf .next && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

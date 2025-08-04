@@ -6,6 +6,7 @@ import {
   SCENARIO_ID,
   newProductScenarioPreset,
 } from "@/domain/scenario";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMessageLocationState } from "@/utils/messageLocationState";
 import { useAsync } from "@/utils/useAsync";
 
@@ -18,6 +19,7 @@ export type AnalysisResult = {
 
 export const useAnalysis = () => {
   const [{ messages, sessionId }] = useMessageLocationState();
+  const [userId] = useLocalStorage<string>("userId", crypto.randomUUID());
   const searchParams = useSearchParams();
   const characterId =
     searchParams.get("character") || beginnerCharacterPreset.id;
@@ -45,6 +47,7 @@ export const useAnalysis = () => {
         character,
         scenario,
         sessionId,
+        userId,
       }),
     });
 

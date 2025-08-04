@@ -11,7 +11,7 @@ import { analyticsService } from "@/services/analyticsService";
 import { middleware } from "@/utils/middleware";
 
 export const POST = middleware(async (req: NextRequest) => {
-  const { messages, character, scenario, sessionId } = await req.json();
+  const { messages, character, scenario, sessionId, userId } = await req.json();
 
   const conversation = formatConversation(messages, character.name);
 
@@ -31,6 +31,18 @@ export const POST = middleware(async (req: NextRequest) => {
 
   // セッション完了時にFirebaseに保存
   if (sessionId) {
+    // セッションが存在しない場合は作成
+    const sessionExists = await analyticsService.sessionExists(sessionId);
+    if (!sessionExists) {
+      await analyticsService.startSession({
+        sessionId,
+        character,
+        scenario,
+        userId: userId || "anonymous",
+        startedAt: new Date(),
+      });
+    }
+
     const userMessages = messages.filter((m: UIMessage) => m.role === "user");
     await analyticsService.completeSession(sessionId, {
       analysisResult: result.object,

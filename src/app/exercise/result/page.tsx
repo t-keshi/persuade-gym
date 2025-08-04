@@ -15,10 +15,40 @@ import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingA
 import { Typography } from "@/components/ui/Typography/Typography";
 
 const ResultContent: React.FC = () => {
-  const { analysis, isLoading } = useAnalysis();
+  const { analysis, isLoading, error } = useAnalysis();
 
-  if (isLoading || !analysis) {
+  if (isLoading) {
     return <ResultLoading />;
+  }
+
+  if (error || !analysis) {
+    return (
+      <VStack
+        height="contentHeight"
+        gap="none"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Container size="sm">
+          <Card>
+            <VStack gap="lg" alignItems="center">
+              <Typography variant="h3" color="error">
+                分析中にエラーが発生しました
+              </Typography>
+              <Box textAlign="center">
+                <Typography>
+                  {error?.message ||
+                    "分析データの取得に失敗しました。もう一度お試しください。"}
+                </Typography>
+              </Box>
+              <Button as="link" href="/exercise/new" size="lg">
+                新しく始める
+              </Button>
+            </VStack>
+          </Card>
+        </Container>
+      </VStack>
+    );
   }
 
   return (
