@@ -18,7 +18,6 @@ export type AnalysisResult = {
 
 export const useAnalysis = () => {
   const [{ messages, sessionId }] = useMessageLocationState();
-  console.log(messages, "messages in useAnalysis");
   const searchParams = useSearchParams();
   const characterId =
     searchParams.get("character") || beginnerCharacterPreset.id;
@@ -32,7 +31,6 @@ export const useAnalysis = () => {
     newProductScenarioPreset;
 
   const state = useAsync(async () => {
-    console.log(messages, "m");
     if (messages.length === 0) {
       throw new Error("対話データがありません");
     }

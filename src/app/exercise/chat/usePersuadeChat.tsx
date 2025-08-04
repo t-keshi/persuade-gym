@@ -15,9 +15,10 @@ import { useMessageLocationState } from "@/utils/messageLocationState";
 // 文字数に応じたポイント消費の計算
 const calculatePointCost = (text: string) => {
   const length = text.length;
-  if (length <= 300) return 20;
-  if (length <= 500) return 40;
-  return 60;
+  if (length <= 300) return 10;
+  if (length <= 500) return 20;
+  if (length <= 700) return 30;
+  return 40;
 };
 
 const MAX_TEXT_LENGTH = 5000;

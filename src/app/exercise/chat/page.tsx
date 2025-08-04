@@ -96,7 +96,12 @@ export const ChatExercisePage: React.FC = () => {
                   <Card>
                     {message.parts?.map((part, i) =>
                       part.type === "text" ? (
-                        <span key={`${message.id}-part-${i}`}>{part.text}</span>
+                        <Typography
+                          key={`${message.id}-part-${i}`}
+                          whiteSpace="pre-wrap"
+                        >
+                          {part.text}
+                        </Typography>
                       ) : null
                     )}
                   </Card>

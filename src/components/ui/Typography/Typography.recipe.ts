@@ -9,6 +9,17 @@ export const typographyRecipe = defineRecipe({
     fontFamily: "default",
   },
   variants: {
+    whiteSpace: {
+      pre: {
+        whiteSpace: "pre",
+      },
+      "pre-wrap": {
+        whiteSpace: "pre-wrap",
+      },
+      normal: {
+        whiteSpace: "normal",
+      },
+    },
     fontWeight: {
       normal: {
         fontWeight: "normal",
@@ -234,5 +245,6 @@ export const typographyRecipe = defineRecipe({
     dense: false,
     fontWeight: "normal",
     italic: false,
+    whiteSpace: "normal",
   } as const,
 } satisfies RecipeConfig);

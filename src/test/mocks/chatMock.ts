@@ -57,11 +57,7 @@ const createMockLanguageModel = (responseText: string) => {
   });
 };
 
-export const chatMock = http.post("/api/chat", async (req) => {
-  // リクエストボディから会話の内容を取得（実際の実装では使用可能）
-  const body = await req.request.json();
-  console.log("Chat API called with:", body);
-
+export const chatMock = http.post("/api/chat", async () => {
   // 現在の応答インデックスに基づいて応答を選択
   const currentResponse =
     conversationResponses[responseIndex % conversationResponses.length];
