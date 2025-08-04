@@ -9,6 +9,7 @@ import { floatingActionAreaRecipe } from "@/components/ui/FloatingActionArea/Flo
 import { headerRecipe } from "@/components/ui/Header/Header.recipe";
 import { informationPanelRecipe } from "@/components/ui/InformationPanel/InformationPanel.recipe";
 import { loadingRecipe } from "@/components/ui/Loading/Loading.recipe";
+import { pointIndicatorRecipe } from "@/components/ui/PointIndicator/PointIndicator.recipe";
 import { radioGroupRecipe } from "@/components/ui/RadioGroup/RadioGroup.recipe";
 import { textAreaRecipe } from "@/components/ui/TextArea/TextArea.recipe";
 import { tooltipRecipe } from "@/components/ui/Tooltip/Tooltip.recipe";
@@ -27,6 +28,7 @@ export const recipes: Exclude<
   header: headerRecipe,
   informationPanel: informationPanelRecipe,
   loading: loadingRecipe,
+  pointIndicator: pointIndicatorRecipe,
   radioGroup: radioGroupRecipe,
   textArea: textAreaRecipe,
   tooltip: tooltipRecipe,

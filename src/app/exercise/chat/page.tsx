@@ -5,13 +5,14 @@ import { SendIcon } from "lucide-react";
 import { Box, Flex, HStack, VStack } from "../../../../styled-system/jsx";
 
 import { FinishConfirmDialog } from "./components/FinishConfirmDialog";
-import { usePersuadeChat } from "./usePersuadeChat";
+import { DEFAULT_POINTS, usePersuadeChat } from "./usePersuadeChat";
 
 import { Avatar } from "@/components/ui/Avatar/Avatar";
 import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
 import { Container } from "@/components/ui/Container/Container";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
+import { PointIndicator } from "@/components/ui/PointIndicator/PointIndicator";
 import { TextArea } from "@/components/ui/TextArea/TextArea";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { Typography } from "@/components/ui/Typography/Typography";
@@ -58,9 +59,12 @@ export const ChatExercisePage: React.FC = () => {
             <Typography>
               現在のステージ: <strong>{currentStage}</strong>
             </Typography>
-            <Typography>
-              残りポイント: <strong>{remainingPoints}</strong>
-            </Typography>
+            <Tooltip
+              content="ポイントは発言の長さで消費されます。短く的確な発言を心がけましょう。"
+              trigger={
+                <PointIndicator value={remainingPoints} max={DEFAULT_POINTS} />
+              }
+            />
           </HStack>
         </Container>
       </Box>

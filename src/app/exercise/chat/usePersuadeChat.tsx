@@ -7,19 +7,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { UIMessage } from "ai";
 
 import { characterPresets } from "@/domain/character";
-import { getInitialMessage, MESSAGE_IDS } from "@/domain/message";
+import { MESSAGE_IDS } from "@/domain/message";
 import { scenarioPresets } from "@/domain/scenario";
 import { useMessageLocationState } from "@/utils/messageLocationState";
 
 // 文字数に応じたポイント消費の計算
 const calculatePointCost = (text: string) => {
   const length = text.length;
-  if (length <= 150) return 30;
-  if (length <= 300) return 60;
-  return 90;
+  if (length <= 150) return 20;
+  if (length <= 300) return 40;
+  return 60;
 };
 
 const MAX_TEXT_LENGTH = 5000;
+export const DEFAULT_POINTS = 100;
 
 // ステージタイプ
 export type Stage = "導入" | "課題確認" | "提案" | "クロージング";
@@ -37,7 +38,7 @@ export const usePersuadeChat = () => {
   const scenario =
     scenarioPresets.find((s) => s.id === scenarioId) || scenarioPresets[0];
 
-  const [remainingPoints, setRemainingPoints] = useState(100);
+  const [remainingPoints, setRemainingPoints] = useState(DEFAULT_POINTS);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const isExerciseEnded = remainingPoints <= 0;
@@ -65,12 +66,11 @@ export const usePersuadeChat = () => {
   // 初回メッセージの設定
   useEffect(() => {
     if (messages.length === 0) {
-      const initialMessage = getInitialMessage(character, scenario);
       setMessages([
         {
           id: MESSAGE_IDS.INITIAL_MESSAGE_ID,
           role: "assistant",
-          parts: [{ type: "text", text: initialMessage }],
+          parts: [{ type: "text", text: character.initialMessage }],
         } as UIMessage,
       ]);
     }

@@ -52,7 +52,7 @@ export const NewExercisePage = () => {
                         <Avatar src={character.avatar} />
                       </Box>
                       <VStack gap="none" alignItems="flex-start">
-                        <HStack gap="xs">
+                        <HStack gap="sm">
                           <Typography>{character.name}</Typography>
                           <Typography variant="caption" color="textSecondary">
                             難易度:
