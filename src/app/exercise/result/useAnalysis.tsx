@@ -1,11 +1,7 @@
 import { useSearchParams } from "next/navigation";
 
 import { characterPresets, beginnerCharacterPreset } from "@/domain/character";
-import {
-  scenarioPresets,
-  SCENARIO_ID,
-  newProductScenarioPreset,
-} from "@/domain/scenario";
+import { scenarioPresets, newProductScenarioPreset } from "@/domain/scenario";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMessageLocationState } from "@/utils/messageLocationState";
 import { useAsync } from "@/utils/useAsync";
@@ -23,7 +19,8 @@ export const useAnalysis = () => {
   const searchParams = useSearchParams();
   const characterId =
     searchParams.get("character") || beginnerCharacterPreset.id;
-  const scenarioId = searchParams.get("scenario") || SCENARIO_ID.NEW_PRODUCT;
+  const scenarioId =
+    searchParams.get("scenario") || newProductScenarioPreset.id;
 
   const character =
     characterPresets.find((c) => c.id === characterId) ||

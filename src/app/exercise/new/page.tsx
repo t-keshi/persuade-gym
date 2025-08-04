@@ -14,7 +14,7 @@ import { RadioGroup } from "@/components/ui/RadioGroup/RadioGroup";
 import { RadioGroupItem } from "@/components/ui/RadioGroup/RadioGroupItem";
 import { Typography } from "@/components/ui/Typography/Typography";
 import { beginnerCharacterPreset, characterPresets } from "@/domain/character";
-import { scenarioPresets } from "@/domain/scenario";
+import { newProductScenarioPreset, scenarioPresets } from "@/domain/scenario";
 
 const NewExercisePage = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const NewExercisePage = () => {
     beginnerCharacterPreset.id
   );
   const [selectedScenario, setSelectedScenario] = useState<string>(
-    scenarioPresets[0].id
+    newProductScenarioPreset.id
   );
 
   const handleStart = () => {

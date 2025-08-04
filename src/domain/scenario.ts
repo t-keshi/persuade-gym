@@ -12,14 +12,8 @@ export interface Scenario {
   keyPoints: string[]; // 重要なポイントや考慮すべき点
 }
 
-export const SCENARIO_ID = {
-  NEW_PRODUCT: "new-product",
-  PRICE_NEGOTIATION: "price-negotiation",
-  INTERNAL_PROJECT: "internal-project",
-} as const;
-
 export const newProductScenarioPreset = {
-  id: SCENARIO_ID.NEW_PRODUCT,
+  id: "new-product",
   title: "新商品の導入提案",
   icon: "🎁",
   description:
@@ -43,7 +37,7 @@ export const newProductScenarioPreset = {
 } as const satisfies Scenario;
 
 export const priceNegotiationScenarioPreset = {
-  id: SCENARIO_ID.PRICE_NEGOTIATION,
+  id: "price-negotiation",
   title: "価格交渉",
   icon: "💰",
   description:
@@ -68,7 +62,7 @@ export const priceNegotiationScenarioPreset = {
 } as const satisfies Scenario;
 
 export const internalProjectScenarioPreset = {
-  id: SCENARIO_ID.INTERNAL_PROJECT,
+  id: "internal-project",
   title: "社内プロジェクト提案",
   icon: "📊",
   description:

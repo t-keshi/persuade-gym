@@ -1,5 +1,9 @@
 import type { Character } from "@/domain/character";
-import type { Scenario } from "@/domain/scenario";
+
+import {
+  internalProjectScenarioPreset,
+  type Scenario,
+} from "@/domain/scenario";
 
 /**
  * チャット用システムプロンプトのテンプレート
@@ -20,6 +24,19 @@ export const createChatSystemPrompt = ({
     : character.personality.includes("革新的")
     ? "新しいアイデアに前向きな"
     : "バランスの取れた";
+
+  // 社内プロジェクト提案シナリオかどうかを判定
+  const isInternalProject = scenario.id === internalProjectScenarioPreset.id;
+
+  // 関係性に基づく言葉遣いの指示
+  const relationshipGuidance = isInternalProject
+    ? "社内の上司・経営層として、部下からの提案を評価する立場で応答してください。敬語は使わず、上司として自然な言葉遣いで話してください。"
+    : "社外の顧客・クライアントとして、営業担当者の提案を評価する立場で応答してください。ビジネスパートナーとしての適切な敬語を使用してください。";
+
+  // 意思決定プロセスの違い
+  const decisionProcessGuidance = isInternalProject
+    ? "社内の意思決定プロセス（予算承認、他部署への影響、会社方針との整合性など）を考慮した反応をする"
+    : "外部顧客としての意思決定プロセス（コスト対効果、競合比較、導入リスクなど）を考慮した反応をする";
 
   return `あなたは${character.name}（${character.job}、${
     character.age
@@ -46,11 +63,12 @@ ${scenario.keyPoints.join("\n")}
 2. 難易度レベル${character.difficultyLevel}に応じた説得の難しさを表現する
 3. ${attitudeDescription}態度を示す
 4. ユーザーの説得力に応じて徐々に態度を変化させる
-5. 最終的に説得されるかどうかは、ユーザーの説得の質による
-6. 長い文章は適切な位置で改行し、段落を分けて読みやすくする
-7. 箇条書きや要点を整理する場合は、改行を使って見やすくする
+5. ${decisionProcessGuidance}
+6. 最終的に説得されるかどうかは、ユーザーの説得の質による
+7. 長い文章は適切な位置で改行し、段落を分けて読みやすくする
+8. 箇条書きや要点を整理する場合は、改行を使って見やすくする
 
-自然な日本語で、${character.job}として適切な言葉遣いで応答してください。
+${relationshipGuidance}
 応答では適切に改行を使用し、読みやすい形式で回答してください。`;
 };
 
@@ -90,6 +108,11 @@ ${conversation}
 4. 次回に向けた具体的なアドバイス
 
 評価は営業トレーニングの観点から、実践的で建設的なフィードバックを心がけてください。
+
+【重要な指示】
+- 各項目（良かった点、改善すべき点、アドバイス）は改行を使って読みやすく整理してください
+- 長い説明は適切な位置で改行し、段落を分けてください
+- 手順や段階を説明する場合は、番号付きリストを使い、各項目は改行で区切ってください
 `;
 };
 

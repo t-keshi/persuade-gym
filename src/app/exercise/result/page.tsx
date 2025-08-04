@@ -91,7 +91,9 @@ const ResultContent: React.FC = () => {
               <Card>
                 <VStack gap="md" alignItems="stretch">
                   <Typography variant="h3">次回に向けたアドバイス</Typography>
-                  <Typography>{analysis.advice}</Typography>
+                  <Typography whiteSpace="pre-wrap">
+                    {analysis.advice}
+                  </Typography>
                 </VStack>
               </Card>
             </Stack>

@@ -6,9 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import type { UIMessage } from "ai";
 
-import { characterPresets } from "@/domain/character";
+import { beginnerCharacterPreset, characterPresets } from "@/domain/character";
+import { createInitialMessage } from "@/domain/initialMessage";
 import { MESSAGE_IDS } from "@/domain/message";
-import { scenarioPresets } from "@/domain/scenario";
+import { newProductScenarioPreset, scenarioPresets } from "@/domain/scenario";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMessageLocationState } from "@/utils/messageLocationState";
 
@@ -32,13 +33,17 @@ export const usePersuadeChat = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const characterId = searchParams.get("character") || "BEGINNER";
-  const scenarioId = searchParams.get("scenario") || "new-product";
+  const characterId =
+    searchParams.get("character") || beginnerCharacterPreset.id;
+  const scenarioId =
+    searchParams.get("scenario") || newProductScenarioPreset.id;
 
   const character =
-    characterPresets.find((c) => c.id === characterId) || characterPresets[0];
+    characterPresets.find((c) => c.id === characterId) ||
+    beginnerCharacterPreset;
   const scenario =
-    scenarioPresets.find((s) => s.id === scenarioId) || scenarioPresets[0];
+    scenarioPresets.find((s) => s.id === scenarioId) ||
+    newProductScenarioPreset;
 
   const [sessionId] = useState<string>(() => crypto.randomUUID());
   const [userId] = useLocalStorage<string>("userId", crypto.randomUUID());
@@ -73,11 +78,12 @@ export const usePersuadeChat = () => {
   // 初回メッセージの設定
   useEffect(() => {
     if (messages.length === 0) {
+      const initialMessage = createInitialMessage(character, scenario);
       setMessages([
         {
           id: MESSAGE_IDS.INITIAL_MESSAGE_ID,
           role: "assistant",
-          parts: [{ type: "text", text: character.initialMessage }],
+          parts: [{ type: "text", text: initialMessage }],
         } as UIMessage,
       ]);
     }
