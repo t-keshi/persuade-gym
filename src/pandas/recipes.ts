@@ -7,7 +7,6 @@ import { containerRecipe } from "@/components/ui/Container/Container.recipe";
 import { dialogRecipe } from "@/components/ui/Dialog/Dialog.recipe";
 import { floatingActionAreaRecipe } from "@/components/ui/FloatingActionArea/FloatingActionArea.recipe";
 import { headerRecipe } from "@/components/ui/Header/Header.recipe";
-import { informationPanelRecipe } from "@/components/ui/InformationPanel/InformationPanel.recipe";
 import { loadingRecipe } from "@/components/ui/Loading/Loading.recipe";
 import { pointIndicatorRecipe } from "@/components/ui/PointIndicator/PointIndicator.recipe";
 import { radioGroupRecipe } from "@/components/ui/RadioGroup/RadioGroup.recipe";
@@ -26,7 +25,6 @@ export const recipes: Exclude<
   dialog: dialogRecipe,
   floatingActionArea: floatingActionAreaRecipe,
   header: headerRecipe,
-  informationPanel: informationPanelRecipe,
   loading: loadingRecipe,
   pointIndicator: pointIndicatorRecipe,
   radioGroup: radioGroupRecipe,

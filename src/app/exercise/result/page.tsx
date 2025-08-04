@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Box, Stack, VStack } from "../../../../styled-system/jsx";
 
@@ -14,7 +14,7 @@ import { Container } from "@/components/ui/Container/Container";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
 import { Typography } from "@/components/ui/Typography/Typography";
 
-const ResultPage: React.FC = () => {
+const ResultContent: React.FC = () => {
   const { analysis, isLoading } = useAnalysis();
 
   if (isLoading || !analysis) {
@@ -78,6 +78,14 @@ const ResultPage: React.FC = () => {
         </FloatingActionArea>
       </Box>
     </VStack>
+  );
+};
+
+const ResultPage: React.FC = () => {
+  return (
+    <Suspense fallback={<ResultLoading />}>
+      <ResultContent />
+    </Suspense>
   );
 };
 

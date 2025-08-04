@@ -1,5 +1,7 @@
 "use client";
 
+import React, { Suspense } from "react";
+
 import { SendIcon } from "lucide-react";
 
 import { Box, Flex, HStack, VStack } from "../../../../styled-system/jsx";
@@ -12,13 +14,14 @@ import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
 import { Container } from "@/components/ui/Container/Container";
 import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
+import { Loading } from "@/components/ui/Loading/Loading";
 import { PointIndicator } from "@/components/ui/PointIndicator/PointIndicator";
 import { TextArea } from "@/components/ui/TextArea/TextArea";
 import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { Typography } from "@/components/ui/Typography/Typography";
 import { useCountdownTimer } from "@/utils/useCountdownTimer";
 
-export const ChatExercisePage: React.FC = () => {
+const ChatExerciseContent: React.FC = () => {
   const {
     messages,
     input,
@@ -202,6 +205,14 @@ export const ChatExercisePage: React.FC = () => {
         </FloatingActionArea>
       </Box>
     </VStack>
+  );
+};
+
+const ChatExercisePage: React.FC = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ChatExerciseContent />
+    </Suspense>
   );
 };
 
