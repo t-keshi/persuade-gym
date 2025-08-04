@@ -2,11 +2,15 @@ import { useState } from "react";
 
 import { createCtx } from "./createCtx";
 
-import type { Message } from "ai";
+import type { UIMessage } from "ai";
 
+type LocationState = {
+  messages: UIMessage[];
+  sessionId?: string;
+};
 
 const [LocationStateProvider, useLocationState] = createCtx<
-  [{ messages: Message[] }, (messages: { messages: Message[] }) => void]
+  [LocationState, (state: LocationState) => void]
 >({
   contextName: "locationState",
 });
@@ -16,9 +20,9 @@ type Props = {
 };
 
 export const MessageLocationStateProvider: React.FC<Props> = ({ children }) => {
-  const [state, setState] = useState<{ messages: Message[] }>({ messages: [] });
-  const setLocationState = (messages: { messages: Message[] }) => {
-    setState(messages);
+  const [state, setState] = useState<LocationState>({ messages: [] });
+  const setLocationState = (newState: LocationState) => {
+    setState(newState);
   };
 
   return (

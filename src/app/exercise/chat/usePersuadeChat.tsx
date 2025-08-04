@@ -9,13 +9,14 @@ import type { UIMessage } from "ai";
 import { characterPresets } from "@/domain/character";
 import { MESSAGE_IDS } from "@/domain/message";
 import { scenarioPresets } from "@/domain/scenario";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useMessageLocationState } from "@/utils/messageLocationState";
 
 // 文字数に応じたポイント消費の計算
 const calculatePointCost = (text: string) => {
   const length = text.length;
-  if (length <= 150) return 20;
-  if (length <= 300) return 40;
+  if (length <= 300) return 20;
+  if (length <= 500) return 40;
   return 60;
 };
 
@@ -38,6 +39,9 @@ export const usePersuadeChat = () => {
   const scenario =
     scenarioPresets.find((s) => s.id === scenarioId) || scenarioPresets[0];
 
+  const [sessionId] = useState<string>(() => crypto.randomUUID());
+  const [userId] = useLocalStorage<string>("userId", crypto.randomUUID());
+
   const [remainingPoints, setRemainingPoints] = useState(DEFAULT_POINTS);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -52,6 +56,8 @@ export const usePersuadeChat = () => {
       body: {
         character: character,
         scenario: scenario,
+        sessionId: sessionId,
+        userId: userId,
         isPointsExhausted: remainingPoints === 0,
       },
     }),
@@ -125,11 +131,11 @@ export const usePersuadeChat = () => {
   };
 
   const handleFinish = useCallback(() => {
-    setLocationState({ messages });
+    setLocationState({ messages, sessionId });
     router.push(
       `/exercise/result?character=${characterId}&scenario=${scenarioId}`
     );
-  }, [messages, setLocationState, router, characterId, scenarioId]);
+  }, [messages, sessionId, setLocationState, router, characterId, scenarioId]);
 
   const hasEndMessage = useMemo(
     () => messages.some((message) => message.id === MESSAGE_IDS.END_MESSAGE_ID),

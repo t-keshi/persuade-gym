@@ -17,7 +17,7 @@ export type AnalysisResult = {
 };
 
 export const useAnalysis = () => {
-  const [{ messages }] = useMessageLocationState();
+  const [{ messages, sessionId }] = useMessageLocationState();
   console.log(messages, "messages in useAnalysis");
   const searchParams = useSearchParams();
   const characterId =
@@ -46,6 +46,7 @@ export const useAnalysis = () => {
         messages,
         character,
         scenario,
+        sessionId,
       }),
     });
 

@@ -37,7 +37,7 @@ export const ChatExercisePage: React.FC = () => {
   } = usePersuadeChat();
 
   const { count, isActive } = useCountdownTimer({
-    initialCount: 10,
+    initialCount: 20,
     onComplete: handleFinish,
     enabled: isExerciseEnded,
   });
@@ -60,9 +60,15 @@ export const ChatExercisePage: React.FC = () => {
               現在のステージ: <strong>{currentStage}</strong>
             </Typography>
             <Tooltip
-              content="ポイントは発言の長さで消費されます。短く的確な発言を心がけましょう。"
+              content="説得体力は発言の長さで消費されます。短く的確な発言を心がけましょう。"
               trigger={
-                <PointIndicator value={remainingPoints} max={DEFAULT_POINTS} />
+                <HStack>
+                  <Typography>説得体力:</Typography>
+                  <PointIndicator
+                    value={remainingPoints}
+                    max={DEFAULT_POINTS}
+                  />
+                </HStack>
               }
             />
           </HStack>

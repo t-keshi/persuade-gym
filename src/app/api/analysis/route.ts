@@ -2,14 +2,16 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject } from "ai";
 import { NextResponse } from "next/server";
 
+import type { UIMessage } from "ai";
 import type { NextRequest } from "next/server";
 
 import { analysisResultSchema } from "@/domain/analysis";
 import { createAnalysisPrompt, formatConversation } from "@/domain/prompts";
+import { analyticsService } from "@/services/analyticsService";
 import { middleware } from "@/utils/middleware";
 
 export const POST = middleware(async (req: NextRequest) => {
-  const { messages, character, scenario } = await req.json();
+  const { messages, character, scenario, sessionId } = await req.json();
 
   const conversation = formatConversation(messages, character.name);
 
@@ -26,6 +28,16 @@ export const POST = middleware(async (req: NextRequest) => {
     schema: analysisResultSchema,
     prompt,
   });
+
+  // セッション完了時にFirebaseに保存
+  if (sessionId) {
+    const userMessages = messages.filter((m: UIMessage) => m.role === "user");
+    await analyticsService.completeSession(sessionId, {
+      analysisResult: result.object,
+      completedAt: new Date(),
+      totalMessagesCount: userMessages.length,
+    });
+  }
 
   return NextResponse.json(result.object);
 });
