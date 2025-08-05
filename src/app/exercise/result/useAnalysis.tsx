@@ -29,7 +29,7 @@ export const useAnalysis = () => {
     scenarioPresets.find((s) => s.id === scenarioId) ||
     newProductScenarioPreset;
 
-  const state = useAsync(async () => {
+  const { value, loading, error, retry } = useAsync(async () => {
     if (messages.length === 0) {
       throw new Error("対話データがありません");
     }
@@ -57,9 +57,10 @@ export const useAnalysis = () => {
   }, [messages, character, scenario]);
 
   return {
-    analysis: state.value,
-    isLoading: state.loading,
-    error: state.error,
+    analysis: value,
+    isLoading: loading,
+    error,
+    retry,
     messages,
     character,
     scenario,

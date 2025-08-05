@@ -19,11 +19,11 @@ const getGradeText = (point: number): GradeInfo => {
   } else if (point >= 70) {
     return { text: "Great!", color: "secondary" };
   } else if (point >= 50) {
-    return { text: "Good", color: "textPrimary" };
+    return { text: "Good!", color: "textPrimary" };
   } else if (point >= 30) {
-    return { text: "Fair", color: "error" };
+    return { text: "Nice try!", color: "textPrimary" };
   } else {
-    return { text: "Keep trying", color: "textSecondary" };
+    return { text: "Keep trying!", color: "textSecondary" };
   }
 };
 

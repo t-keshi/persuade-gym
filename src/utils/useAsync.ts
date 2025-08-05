@@ -1,11 +1,5 @@
-import type {
-  DependencyList} from "react";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import type { DependencyList } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type AsyncState<T> =
   | {
@@ -98,5 +92,5 @@ export const useAsync = <T extends FunctionReturningPromise>(
     callback();
   }, [callback]);
 
-  return state;
+  return { ...state, retry: callback };
 };

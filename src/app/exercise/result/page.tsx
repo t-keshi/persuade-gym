@@ -15,7 +15,7 @@ import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingA
 import { Typography } from "@/components/ui/Typography/Typography";
 
 const ResultContent: React.FC = () => {
-  const { analysis, isLoading, error } = useAnalysis();
+  const { analysis, isLoading, error, retry } = useAnalysis();
 
   if (isLoading) {
     return <ResultLoading />;
@@ -41,9 +41,19 @@ const ResultContent: React.FC = () => {
                     "分析データの取得に失敗しました。もう一度お試しください。"}
                 </Typography>
               </Box>
-              <Button as="link" href="/exercise/new" size="lg">
-                新しく始める
-              </Button>
+              <VStack gap="md" alignItems="center">
+                <Button onClick={retry} size="lg" variant="primary">
+                  リトライ
+                </Button>
+                <Button
+                  as="link"
+                  href="/exercise/new"
+                  size="lg"
+                  variant="outlined"
+                >
+                  新しく始める
+                </Button>
+              </VStack>
             </VStack>
           </Card>
         </Container>
