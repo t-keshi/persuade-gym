@@ -58,7 +58,12 @@ const ChatExerciseContent: React.FC = () => {
         py="sm"
       >
         <Container>
-          <HStack justifyContent="center" gap="lg">
+          <HStack
+            justifyContent="center"
+            columnGap="lg"
+            flexWrap="wrap"
+            minWidth="1/5"
+          >
             <Typography>
               現在のステージ: <strong>{currentStage}</strong>
             </Typography>
