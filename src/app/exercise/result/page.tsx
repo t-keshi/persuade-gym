@@ -1,134 +1,36 @@
-"use client";
+import { ResultExerciseClient } from "./ResultExerciseClient";
 
-import React, { Suspense } from "react";
+import type { Metadata } from "next";
 
-import { Box, Stack, VStack } from "../../../../styled-system/jsx";
+import { characterPresets } from "@/domain/character";
+import { scenarioPresets } from "@/domain/scenario";
 
-import { GradingScale } from "./components/GradingScale";
-import { ResultLoading } from "./components/ResultLoading";
-import { useAnalysis } from "./useAnalysis";
-
-import { Button } from "@/components/ui/Button/Button";
-import { Card } from "@/components/ui/Card/Card";
-import { Container } from "@/components/ui/Container/Container";
-import { FloatingActionArea } from "@/components/ui/FloatingActionArea/FloatingActionArea";
-import { Typography } from "@/components/ui/Typography/Typography";
-
-const ResultContent: React.FC = () => {
-  const { analysis, isLoading, error, retry } = useAnalysis();
-
-  if (isLoading) {
-    return <ResultLoading />;
-  }
-
-  if (error || !analysis) {
-    return (
-      <VStack
-        height="contentHeight"
-        gap="none"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Container size="sm">
-          <Card>
-            <VStack gap="lg" alignItems="center">
-              <Typography variant="h3" color="error">
-                分析中にエラーが発生しました
-              </Typography>
-              <Box textAlign="center">
-                <Typography>
-                  {error?.message ||
-                    "分析データの取得に失敗しました。もう一度お試しください。"}
-                </Typography>
-              </Box>
-              <VStack gap="md" alignItems="center">
-                <Button onClick={retry} size="lg" variant="primary">
-                  リトライ
-                </Button>
-                <Button
-                  as="link"
-                  href="/exercise/new"
-                  size="lg"
-                  variant="outlined"
-                >
-                  新しく始める
-                </Button>
-              </VStack>
-            </VStack>
-          </Card>
-        </Container>
-      </VStack>
-    );
-  }
-
-  return (
-    <VStack height="contentHeight" gap="none">
-      <Box flexGrow={1} overflowY="scroll" width="full">
-        <Container>
-          <Box p="lg">
-            <Stack gap="lg">
-              <GradingScale point={analysis.overallScore} />
-
-              {/* 良かった点 */}
-              {analysis.strengths.length > 0 && (
-                <Card>
-                  <VStack gap="md" alignItems="stretch">
-                    <Typography variant="h3">良かった点</Typography>
-                    <VStack gap="sm" alignItems="stretch">
-                      {analysis.strengths.map((strength, index) => (
-                        <Typography key={index}>• {strength}</Typography>
-                      ))}
-                    </VStack>
-                  </VStack>
-                </Card>
-              )}
-
-              {/* 改善点 */}
-              {analysis.improvements.length > 0 && (
-                <Card>
-                  <VStack gap="md" alignItems="stretch">
-                    <Typography variant="h3">改善点</Typography>
-                    <VStack gap="sm" alignItems="stretch">
-                      {analysis.improvements.map((improvement, index) => (
-                        <Typography key={index}>• {improvement}</Typography>
-                      ))}
-                    </VStack>
-                  </VStack>
-                </Card>
-              )}
-
-              {/* アドバイス */}
-              <Card>
-                <VStack gap="md" alignItems="stretch">
-                  <Typography variant="h3">次回に向けたアドバイス</Typography>
-                  <Typography whiteSpace="pre-wrap">
-                    {analysis.advice}
-                  </Typography>
-                </VStack>
-              </Card>
-            </Stack>
-          </Box>
-        </Container>
-      </Box>
-      <Box width="full" paddingBottom="lg">
-        <FloatingActionArea>
-          <Container size="sm">
-            <Button as="link" size="lg" width="hug" href="/exercise/new">
-              再チャレンジ
-            </Button>
-          </Container>
-        </FloatingActionArea>
-      </Box>
-    </VStack>
-  );
+type Props = {
+  searchParams: Promise<{ character?: string; scenario?: string }>;
 };
 
-const ResultPage: React.FC = () => {
-  return (
-    <Suspense fallback={<ResultLoading />}>
-      <ResultContent />
-    </Suspense>
-  );
+export const generateMetadata = async ({
+  searchParams,
+}: Props): Promise<Metadata> => {
+  const params = await searchParams;
+  const character = characterPresets.find((c) => c.id === params.character);
+  const scenario = scenarioPresets.find((s) => s.id === params.scenario);
+
+  return {
+    title: `${scenario?.title || "トレーニング"}の結果`,
+    description: `${character?.name || "AI"}との${
+      scenario?.title || "説得トレーニング"
+    }の分析結果`,
+    openGraph: {
+      title: `説得力分析結果 - ${scenario?.title || "トレーニング"}`,
+      description:
+        "あなたの説得力を詳細に分析しました。強みと改善点を確認しよう。",
+    },
+  };
 };
 
-export default ResultPage;
+const ResultExercisePage = () => {
+  return <ResultExerciseClient />;
+};
+
+export default ResultExercisePage;
