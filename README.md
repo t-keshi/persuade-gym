@@ -2,6 +2,8 @@
 
 営業職の説得力を鍛えるための AI トレーニングアプリケーションです。
 
+🚀 **デモ**: [https://persuade-gym.vercel.app](https://persuade-gym.vercel.app)
+
 ## 概要
 
 Persuade Gym は、AI との対話を通じて説得力を向上させるトレーニングアプリです。様々な難易度のキャラクターと、実践的なビジネスシナリオで練習することができます。
